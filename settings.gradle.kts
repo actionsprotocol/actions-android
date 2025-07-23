@@ -22,4 +22,6 @@ includeBuild("build-conventions")
 
 include(
     ":sources:common:common-arch",
+    ":sources:common:common-network",
+    ":sources:common:common-util",
 )
