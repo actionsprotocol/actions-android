@@ -25,4 +25,8 @@ include(
     ":sources:common:common-navigation",
     ":sources:common:common-network",
     ":sources:common:common-util",
+
+    ":sources:repository:repository-solana",
+    ":sources:repository:repository-preferences",
+    ":sources:repository:repository-user",
 )
