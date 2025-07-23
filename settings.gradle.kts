@@ -26,7 +26,8 @@ include(
     ":sources:common:common-network",
     ":sources:common:common-util",
 
-    ":sources:repository:repository-solana",
+    ":sources:repository:repository-onboarding",
     ":sources:repository:repository-preferences",
+    ":sources:repository:repository-solana",
     ":sources:repository:repository-user",
 )
