@@ -25,9 +25,12 @@ include(
     ":sources:common:common-navigation",
     ":sources:common:common-network",
     ":sources:common:common-util",
+    ":sources:common:common-ui",
 
     ":sources:repository:repository-onboarding",
     ":sources:repository:repository-preferences",
     ":sources:repository:repository-solana",
     ":sources:repository:repository-user",
+
+    ":sources:feature:feature-splash",
 )
