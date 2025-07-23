@@ -19,3 +19,7 @@ dependencyResolutionManagement {
 
 includeBuild("build-settings")
 includeBuild("build-conventions")
+
+include(
+    ":sources:common:common-arch",
+)
