@@ -5,22 +5,20 @@ import app.actionsfun.repository.solana.WalletRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-interface DepositToMarketInteractor {
+interface ClaimSolInteractor {
 
-    suspend fun deposit(marketAddress: String, amount: Long, option: Boolean): String
+    suspend fun claim(marketAddress: String): String
 }
 
-internal class DepositToMarketInteractorImpl(
+internal class ClaimSolInteractorImpl(
     private val createTransactionInteractor: CreateTransactionInteractor,
     private val walletRepository: WalletRepository,
-) : DepositToMarketInteractor {
+) : ClaimSolInteractor {
 
-    override suspend fun deposit(marketAddress: String, amount: Long, option: Boolean): String {
+    override suspend fun claim(marketAddress: String): String {
         return withContext(Dispatchers.IO) {
-            val transaction = createTransactionInteractor.createDepositToMarketTransaction(
+            val transaction = createTransactionInteractor.createClaimSolTransaction(
                 marketAddress = marketAddress,
-                amountLamports = amount,
-                option = option,
             )
 
             walletRepository.sendAndConfirmTransaction(transaction)

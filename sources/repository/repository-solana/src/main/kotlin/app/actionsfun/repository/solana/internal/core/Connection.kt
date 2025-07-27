@@ -38,8 +38,6 @@ import java.math.BigInteger
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.Base64
-import app.actionsfun.repository.solana.internal.core.api.SignatureStatus
-import app.actionsfun.repository.solana.internal.core.rpc.GetSignatureStatusesResponse
 
 class Connection @JvmOverloads constructor(
     private val rpcUrl: String,
@@ -279,17 +277,6 @@ class Connection @JvmOverloads constructor(
 
     fun simulateTransaction(transaction: VersionedTransaction): TransactionSimulation {
         return simulateTransaction(transaction.serialize())
-    }
-
-    fun getSignatureStatuses(signatures: List<String>): List<SignatureStatus?> {
-        val result: GetSignatureStatusesResponse = rpcCall(
-            "getSignatureStatuses",
-            listOf(
-                Json.encodeToJsonElement(signatures),
-                Json.encodeToJsonElement(mapOf("searchTransactionHistory" to true))
-            )
-        )
-        return result.value
     }
 
     private inline fun <reified T, reified I : Any> rpcCall(method: String, params: List<I>): T {

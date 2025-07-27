@@ -15,10 +15,12 @@ import kotlinx.coroutines.withContext
 internal interface CreateTransactionInteractor {
 
     suspend fun createDepositToMarketTransaction(
-        marketId: String,
-        lamports: Long,
+        marketAddress: String,
+        amountLamports: Long,
         option: Boolean,
     ): ByteArray
+
+    suspend fun createClaimSolTransaction(marketAddress: String): ByteArray
 }
 
 internal class CreateTransactionInteractorImpl(
@@ -27,8 +29,8 @@ internal class CreateTransactionInteractorImpl(
 ) : CreateTransactionInteractor {
 
     override suspend fun createDepositToMarketTransaction(
-        marketId: String,
-        lamports: Long,
+        marketAddress: String,
+        amountLamports: Long,
         option: Boolean
     ): ByteArray {
         return withContext(Dispatchers.IO) {
@@ -41,9 +43,31 @@ internal class CreateTransactionInteractorImpl(
             val instructionData = generateInstructions(
                 type = "makePrediction",
                 params = mapOf(
-                    "marketAddress" to marketId,
+                    "marketAddress" to marketAddress,
                     "option" to option,
-                    "amountLamports" to lamports,
+                    "amountLamports" to amountLamports,
+                    "participantAddress" to wallet.publicKey,
+                )
+            )
+
+            val transaction = buildTransaction(wallet.publicKey, instructionData.instructions)
+
+            transaction.serialize()
+        }
+    }
+
+    override suspend fun createClaimSolTransaction(marketAddress: String): ByteArray {
+        return withContext(Dispatchers.IO) {
+            val wallet = walletRepository.getWallet()
+
+            check(!wallet.isNone) {
+                "Wallet is not connected."
+            }
+
+            val instructionData = generateInstructions(
+                type = "makePrediction",
+                params = mapOf(
+                    "marketAddress" to marketAddress,
                     "participantAddress" to wallet.publicKey,
                 )
             )
