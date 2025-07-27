@@ -8,6 +8,7 @@ import com.solana.mobilewalletadapter.clientlib.protocol.MobileWalletAdapterClie
 import com.solana.mobilewalletadapter.clientlib.successPayload
 import timber.log.Timber
 import app.actionsfun.repository.solana.activity.ActivityResultSenderProvider
+import app.actionsfun.repository.solana.internal.core.Base58
 import app.actionsfun.repository.solana.internal.core.Keypair
 import app.actionsfun.repository.solana.internal.core.Transaction
 
@@ -50,6 +51,23 @@ internal class MobileWalletAdapterWrapper(
             when (transactionResult) {
                 is TransactionResult.Success -> transactionResult.payload
                 else -> error("Signing failed.")
+            }
+        }
+    }
+
+    suspend fun signAndSendTransactions(
+        transactions: Array<ByteArray>
+    ): List<String> {
+        val activityResultSender = activityResultSenderProvider.activityResultSender
+            ?: error("No activity result sender found.")
+
+        return walletAdapter.transact(activityResultSender) {
+            signAndSendTransactions(transactions)
+        }.let { transactionResult ->
+            when (transactionResult) {
+                is TransactionResult.Success -> transactionResult.payload.signatures.map(Base58::encode)
+                is TransactionResult.NoWalletFound -> error("No MWA compatible wallet app found on device.")
+                is TransactionResult.Failure -> error("Transaction failed: ${transactionResult.e.message}")
             }
         }
     }

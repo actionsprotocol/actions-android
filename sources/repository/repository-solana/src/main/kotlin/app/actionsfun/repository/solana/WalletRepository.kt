@@ -21,4 +21,6 @@ interface WalletRepository {
     suspend fun connectWallet()
 
     suspend fun disconnectWallet()
+
+    suspend fun sendAndConfirmTransaction(transactionBytes: ByteArray): String
 }

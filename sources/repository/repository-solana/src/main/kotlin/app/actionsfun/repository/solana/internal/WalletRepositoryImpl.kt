@@ -2,6 +2,7 @@ package app.actionsfun.repository.solana.internal
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
@@ -124,6 +125,15 @@ internal class WalletRepositoryImpl(
     override suspend fun getLatestBlockhash(): String {
         return withContext(Dispatchers.IO) {
             connection.getLatestBlockhash(Commitment.Confirmed)
+        }
+    }
+
+    override suspend fun sendAndConfirmTransaction(transactionBytes: ByteArray): String {
+        return withContext(Dispatchers.IO) {
+            val signatures = mobileWalletAdapter.signAndSendTransactions(
+                transactions = arrayOf(transactionBytes)
+            )
+            signatures.firstOrNull() ?: error("No transaction signature returned")
         }
     }
 }
