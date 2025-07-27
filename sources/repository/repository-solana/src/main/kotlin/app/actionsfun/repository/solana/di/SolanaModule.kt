@@ -24,9 +24,9 @@ val SolanaModule = module {
     single<MobileWalletAdapter> {
         MobileWalletAdapter(
             connectionIdentity = ConnectionIdentity(
-                identityUri = "https://dvpn.app".toUri(),
+                identityUri = "https://actions.fun".toUri(),
                 iconUri = "favicon.ico".toUri(),
-                identityName = "dvpn.app",
+                identityName = "actions.fun",
             )
         )
     }

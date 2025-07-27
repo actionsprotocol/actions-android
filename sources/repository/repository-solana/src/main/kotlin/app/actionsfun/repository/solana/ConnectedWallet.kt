@@ -11,6 +11,9 @@ data class ConnectedWallet(
     val accounts: List<Account>,
 ) {
 
+    val isNone: Boolean
+        get() = this == Empty
+
     @Serializable
     data class Account(
         val publicKey: String,

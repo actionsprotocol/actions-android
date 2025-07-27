@@ -17,10 +17,12 @@ import app.actionsfun.repository.solana.WalletRepository
 import app.actionsfun.repository.solana.internal.core.PublicKey
 import app.actionsfun.repository.solana.internal.core.Connection
 import app.actionsfun.repository.solana.ConnectedWallet
+import app.actionsfun.repository.solana.internal.core.api.Commitment
 import app.actionsfun.repository.solana.internal.core.rpc.TokenAmount
 import app.actionsfun.repository.solana.internal.wallet.ConnectedWalletPreference
 import app.actionsfun.repository.solana.internal.wallet.MobileWalletAdapterWrapper
 import app.actionsfun.repository.user.UserRepository
+import java.math.BigInteger
 
 internal class WalletRepositoryImpl(
     private val appPreferences: AppPreferences,
@@ -107,6 +109,21 @@ internal class WalletRepositoryImpl(
                     account?.account?.data?.parsed?.info?.tokenAmount
                 }
                 .getOrDefault(null)
+        }
+    }
+
+    override suspend fun getBalance(): BigInteger? {
+        return withContext(Dispatchers.IO) {
+            runCatching { getWallet().publicKey }
+                .mapCatching(::PublicKey)
+                .mapCatching(connection::getBalance)
+                .getOrDefault(null)
+        }
+    }
+
+    override suspend fun getLatestBlockhash(): String {
+        return withContext(Dispatchers.IO) {
+            connection.getLatestBlockhash(Commitment.Confirmed)
         }
     }
 }
