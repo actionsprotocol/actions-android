@@ -1,0 +1,403 @@
+package app.actionsfun.feature.home.ui.components.market
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import app.actionsfun.common.ui.components.threed.Gyroscopic3DLayout
+import app.actionsfun.common.ui.style.AppTheme
+import app.actionsfun.common.ui.style.Body12Regular
+import app.actionsfun.common.ui.style.Body14Regular
+import app.actionsfun.common.ui.style.Body16Medium
+import app.actionsfun.common.ui.style.Heading3
+import app.actionsfun.common.util.Timer
+import app.actionsfun.common.util.timeLeftString
+import app.actionsfun.common.util.timeRelativeString
+import app.actionsfun.feature.home.ui.components.AnimatedNumber
+import app.actionsfun.feature.home.ui.components.Section
+import app.actionsfun.feature.home.ui.components.SectionedArcProgress
+import coil.compose.AsyncImage
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import java.time.OffsetDateTime
+import java.util.UUID
+import kotlin.math.roundToInt
+import kotlin.time.Duration.Companion.seconds
+
+@Stable
+internal data class MarketUI(
+    val address: String,
+    val image: String,
+    val title: String,
+    val description: String,
+    val creatorUsername: String,
+    val creatorAvatar: String,
+    val createdAt: OffsetDateTime,
+    val endsAt: OffsetDateTime,
+    val volume: Double,
+    val volumeYes: Double,
+    val volumeNo: Double,
+    val replies: List<CommentUI>,
+    val accentColor: Color,
+)
+
+@Stable
+internal data class CommentUI(
+    val image: String,
+    val author: String,
+    val text: String,
+    val createdAt: OffsetDateTime,
+)
+
+@Composable
+internal fun Market(
+    state: MarketUI,
+    modifier: Modifier = Modifier,
+) {
+    Gyroscopic3DLayout(
+        modifier = modifier,
+        color = Color.White,
+        shape = RoundedCornerShape(32.dp),
+        shadowColor = Color(0xFFEC58A9),
+        shadowAlignment = Alignment.BottomStart,
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .border(
+                    width = 2.dp,
+                    color = Color(0xFFEC58A9),
+                    shape = RoundedCornerShape(32.dp)
+                )
+                .padding(all = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp),
+            horizontalAlignment = Alignment.Start,
+        ) {
+            Header(state)
+
+            MarketDescription(state)
+
+            AboutMarket(state)
+
+            Replies(state)
+        }
+    }
+}
+
+@Composable
+private fun Header(
+    state: MarketUI,
+    modifier: Modifier = Modifier,
+) {
+    var endsAt by remember {
+        mutableStateOf(state.endsAt.timeLeftString())
+    }
+
+    LaunchedEffect(Unit) {
+        Timer.endless(rate = 1.seconds).start()
+            .onEach { endsAt = state.endsAt.timeLeftString() }
+            .launchIn(this)
+    }
+
+    Row(
+        modifier = modifier
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        AsyncImage(
+            model = state.creatorAvatar,
+            modifier = Modifier
+                .size(48.dp)
+                .clip(RoundedCornerShape(12.dp)),
+            contentDescription = null,
+        )
+
+        Column(Modifier.weight(1f)) {
+            Text(
+                text = state.creatorUsername,
+                style = Body16Medium,
+                color = AppTheme.Colors.Text.Primary,
+            )
+            Text(
+                text = state.createdAt.timeRelativeString(),
+                style = Body12Regular,
+                color = AppTheme.Colors.Text.Secondary,
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .border(
+                    color = Color(0xFFE9E9ED),
+                    width = 1.dp,
+                    shape = RoundedCornerShape(24.dp)
+                )
+                .padding(vertical = 6.dp, horizontal = 10.dp),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                text = endsAt,
+                style = Body16Medium,
+                color = AppTheme.Colors.Text.Primary,
+                modifier = Modifier,
+            )
+        }
+    }
+}
+
+@Composable
+private fun MarketDescription(
+    state: MarketUI,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalAlignment = Alignment.Start,
+    ) {
+        Text(
+            text = state.title,
+            style = Heading3,
+            color = AppTheme.Colors.Text.Primary,
+        )
+        Text(
+            text = state.description,
+            style = Body14Regular,
+            color = AppTheme.Colors.Text.Secondary,
+        )
+    }
+}
+
+@Composable
+private fun AboutMarket(
+    state: MarketUI,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalAlignment = Alignment.Start,
+    ) {
+        Text(
+            text = "About market",
+            style = Heading3,
+            color = AppTheme.Colors.Text.Primary,
+        )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            AsyncImage(
+                model = state.image,
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(RoundedCornerShape(12.dp)),
+                contentDescription = null,
+            )
+
+            VerticalDivider(
+                modifier = Modifier.size(16.dp),
+                thickness = 1.dp,
+                color = Color(0xFFE9E9ED),
+            )
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                Column {
+                    Text(
+                        text = "Chance",
+                        style = Body12Regular,
+                        color = AppTheme.Colors.Text.Secondary,
+                    )
+                    Row {
+                        AnimatedNumber(
+                            number = ((state.volumeYes / state.volume) * 100).roundToInt(),
+                            style = Heading3,
+                            color = AppTheme.Colors.Text.Primary
+                        )
+                        Text(
+                            text = "%",
+                            style = Heading3,
+                            color = AppTheme.Colors.Text.Primary,
+                        )
+                    }
+                }
+
+                SectionedArcProgress(
+                    modifier = Modifier
+                        .width(48.dp),
+                    strokeWidth = 6.dp,
+                    sections = listOf(
+                        Section(
+                            color = Color(0xFF21D979),
+                            value = state.volumeYes.toFloat()
+                        ),
+                        Section(
+                            color = Color(0xFFE9E9ED),
+                            value = state.volumeNo.toFloat(),
+                        ),
+                    )
+                )
+            }
+
+            VerticalDivider(
+                modifier = Modifier.size(16.dp),
+                thickness = 1.dp,
+                color = Color(0xFFE9E9ED),
+            )
+
+            Column {
+                Text(
+                    text = "Volume",
+                    style = Body12Regular,
+                    color = AppTheme.Colors.Text.Secondary,
+                )
+
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Image(
+                        modifier = Modifier.size(24.dp),
+                        painter = painterResource(app.actionsfun.common.ui.R.drawable.ic_solana),
+                        contentDescription = null,
+                    )
+                    AnimatedNumber(
+                        number = state.volume,
+                        style = Heading3,
+                        color = AppTheme.Colors.Text.Primary
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun Replies(
+    state: MarketUI,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalAlignment = Alignment.Start,
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Text(
+                text = "Replies",
+                style = Body16Medium,
+                color = AppTheme.Colors.Text.Primary,
+            )
+            Text(
+                text = "View All (${state.replies.size})",
+                style = Body14Regular,
+                color = AppTheme.Colors.Text.Primary,
+            )
+        }
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalAlignment = Alignment.Start,
+        ) {
+            state.replies.forEach { reply ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    AsyncImage(
+                        model = reply.image,
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clip(CircleShape),
+                        contentDescription = null,
+                    )
+
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        text = reply.text,
+                        style = Body14Regular,
+                        color = AppTheme.Colors.Text.Primary,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun Preview() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(vertical = 56.dp, horizontal = 16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Market(
+            modifier = Modifier
+                .fillMaxSize(),
+            state = MarketUI(
+                address = UUID.randomUUID().toString(),
+                createdAt = OffsetDateTime.now().minusMinutes(24),
+                endsAt = OffsetDateTime.now().plusHours(2).plusMinutes(21),
+                volumeYes = 5.6,
+                volumeNo = 4.4,
+                volume = 10.0,
+                image = "",
+                title = "Will pump.fun have higher trading volume than bonk.fun in exactly 24 hours?",
+                description = "This market will resolve to YES if, exactly 24 hours after creation, pump.fun shows higher total trading volume than bonk.fun. Verification will be based on publicly available sources such as Axiom dashboards or on-chain data explorers.",
+                creatorUsername = "@narracanz",
+                creatorAvatar = "",
+                replies = listOf(),
+                accentColor = Color(0xFFEC58A9)
+            )
+        )
+    }
+}
