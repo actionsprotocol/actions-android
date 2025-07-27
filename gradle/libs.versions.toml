@@ -94,6 +94,7 @@ solanaMobile = "com.solanamobile:mobile-wallet-adapter-clientlib-ktx:2.0.3"
 solana = "org.sol4k:sol4k:0.5.14"
 jsoup = "org.jsoup:jsoup:1.15.3"
 datastore = "androidx.datastore:datastore-preferences:1.1.7"
+pageIndicator = "mx.platacard:compose-pager-indicator:0.0.8"
 
 [bundles]
 

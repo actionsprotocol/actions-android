@@ -18,4 +18,5 @@ dependencies {
     implementation(libs.koinAndroid)
     implementation(libs.coilCore)
     implementation(libs.coilCompose)
+    implementation(libs.pageIndicator)
 }
