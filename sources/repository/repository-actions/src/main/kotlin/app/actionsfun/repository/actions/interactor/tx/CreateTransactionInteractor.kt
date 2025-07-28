@@ -65,7 +65,7 @@ internal class CreateTransactionInteractorImpl(
             }
 
             val instructionData = generateInstructions(
-                type = "makePrediction",
+                type = "claimWinnings",
                 params = mapOf(
                     "marketAddress" to marketAddress,
                     "participantAddress" to wallet.publicKey,

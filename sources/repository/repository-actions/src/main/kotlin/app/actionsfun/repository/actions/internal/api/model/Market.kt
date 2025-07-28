@@ -46,32 +46,61 @@ internal data class SerializedMarket(
 enum class UIMarketState {
     @SerialName("Active")
     Active,
+
     @SerialName("Deciding")
     Deciding,
+
     @SerialName("CanceledByCreator")
     CanceledByCreator,
+
     @SerialName("AutoCanceled")
     AutoCanceled,
+
     @SerialName("FinalizedYes")
     FinalizedYes,
+
     @SerialName("FinalizedNo")
     FinalizedNo,
+
     @SerialName("FinalizedNoParticipantsYes")
     FinalizedNoParticipantsYes,
+
     @SerialName("FinalizedNoParticipantsNo")
     FinalizedNoParticipantsNo
 }
+
+inline val MarketUiState.isActive: Boolean
+    get() = state in listOf(UIMarketState.Active)
+
+inline val MarketUiState.isCancelled: Boolean
+    get() = state in listOf(
+        UIMarketState.CanceledByCreator,
+        UIMarketState.AutoCanceled,
+        UIMarketState.FinalizedNoParticipantsYes,
+        UIMarketState.FinalizedNoParticipantsNo,
+    )
+
+inline val MarketUiState.isFinished: Boolean
+    get() = state in listOf(
+        UIMarketState.FinalizedYes,
+        UIMarketState.FinalizedNo,
+        UIMarketState.Deciding,
+    )
 
 @Serializable
 enum class MarketStatus {
     @SerialName("Active")
     Active,
+
     @SerialName("Deciding")
     Deciding,
+
     @SerialName("Finalized")
     Finalized,
+
     @SerialName("FinalizedNoParticipants")
     FinalizedNoParticipants,
+
     @SerialName("AutoCanceled")
     AutoCanceled
 }
@@ -80,6 +109,7 @@ enum class MarketStatus {
 enum class WinningOptionType {
     @SerialName("yes")
     Yes,
+
     @SerialName("no")
     No
 }
@@ -131,6 +161,7 @@ internal fun UIMarketState.isSettled(): Boolean {
         UIMarketState.FinalizedNoParticipantsNo,
         UIMarketState.CanceledByCreator,
         UIMarketState.AutoCanceled -> true
+
         else -> false
     }
 }

@@ -17,4 +17,6 @@ data class Market(
     val noVolume: Float,
     val replies: List<Reply>,
     val uiState: MarketUiState,
+    val video: String? = null,
+    val participants: List<Participant>,
 )

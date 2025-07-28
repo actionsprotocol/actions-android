@@ -1,11 +1,14 @@
 package app.actionsfun.repository.actions.di
 
+import app.actionsfun.common.network.backendurl.BackendUrl
 import app.actionsfun.repository.actions.interactor.ClaimSolInteractor
 import app.actionsfun.repository.actions.interactor.ClaimSolInteractorImpl
 import app.actionsfun.repository.actions.interactor.DepositToMarketInteractor
 import app.actionsfun.repository.actions.interactor.DepositToMarketInteractorImpl
 import app.actionsfun.repository.actions.interactor.GetMarketClaimStatusInteractor
 import app.actionsfun.repository.actions.interactor.GetMarketClaimStatusInteractorImpl
+import app.actionsfun.repository.actions.interactor.GetMarketInteractor
+import app.actionsfun.repository.actions.interactor.GetMarketInteractorImpl
 import app.actionsfun.repository.actions.interactor.GetMarketParticipantsInteractor
 import app.actionsfun.repository.actions.interactor.GetMarketParticipantsInteractorImpl
 import app.actionsfun.repository.actions.interactor.GetMarketsInteractor
@@ -34,7 +37,7 @@ val ActionsRepositoryModule = module {
                 json.asConverterFactory(
                     "application/json; charset=UTF8".toMediaType())
             )
-            .baseUrl("https://actions-backend-mainnet.onrender.com/")
+            .baseUrl(BackendUrl.Environmental.app)
             .client(get())
             .build()
             .create()
@@ -42,6 +45,12 @@ val ActionsRepositoryModule = module {
 
     single<GetMarketsInteractor> {
         GetMarketsInteractorImpl(
+            api = get(),
+        )
+    }
+
+    single<GetMarketInteractor> {
+        GetMarketInteractorImpl(
             api = get(),
         )
     }

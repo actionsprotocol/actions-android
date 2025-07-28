@@ -38,4 +38,5 @@ include(
     ":sources:feature:feature-splash",
     ":sources:feature:feature-onboarding",
     ":sources:feature:feature-home",
+    ":sources:feature:feature-market",
 )

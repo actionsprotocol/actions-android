@@ -44,6 +44,7 @@ internal class GetParticipatedMarketsInteractorImpl(
                     yesVolume = market.yesAmount.lamportsToSOL(),
                     noVolume = market.noAmount.lamportsToSOL(),
                     replies = emptyList(),
+                    participants = emptyList(),
                 )
             }
         }
