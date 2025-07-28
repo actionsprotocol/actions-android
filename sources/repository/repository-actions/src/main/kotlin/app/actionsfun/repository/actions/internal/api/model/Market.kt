@@ -63,7 +63,7 @@ enum class UIMarketState {
 }
 
 @Serializable
-internal enum class MarketStatus {
+enum class MarketStatus {
     @SerialName("Active")
     Active,
     @SerialName("Deciding")

@@ -4,8 +4,14 @@ import app.actionsfun.repository.actions.interactor.ClaimSolInteractor
 import app.actionsfun.repository.actions.interactor.ClaimSolInteractorImpl
 import app.actionsfun.repository.actions.interactor.DepositToMarketInteractor
 import app.actionsfun.repository.actions.interactor.DepositToMarketInteractorImpl
+import app.actionsfun.repository.actions.interactor.GetMarketClaimStatusInteractor
+import app.actionsfun.repository.actions.interactor.GetMarketClaimStatusInteractorImpl
+import app.actionsfun.repository.actions.interactor.GetMarketParticipantsInteractor
+import app.actionsfun.repository.actions.interactor.GetMarketParticipantsInteractorImpl
 import app.actionsfun.repository.actions.interactor.GetMarketsInteractor
 import app.actionsfun.repository.actions.interactor.GetMarketsInteractorImpl
+import app.actionsfun.repository.actions.interactor.GetParticipatedMarketsInteractor
+import app.actionsfun.repository.actions.interactor.GetParticipatedMarketsInteractorImpl
 import app.actionsfun.repository.actions.interactor.SendReplyInteractor
 import app.actionsfun.repository.actions.interactor.SendReplyInteractorImpl
 import app.actionsfun.repository.actions.interactor.tx.CreateTransactionInteractor
@@ -57,6 +63,26 @@ val ActionsRepositoryModule = module {
     single<ClaimSolInteractor> {
         ClaimSolInteractorImpl(
             createTransactionInteractor = get(),
+            walletRepository = get(),
+        )
+    }
+
+    single<GetMarketClaimStatusInteractor> {
+        GetMarketClaimStatusInteractorImpl(
+            api = get(),
+            walletRepository = get(),
+        )
+    }
+
+    single<GetMarketParticipantsInteractor> {
+        GetMarketParticipantsInteractorImpl(
+            api = get(),
+        )
+    }
+
+    single<GetParticipatedMarketsInteractor> {
+        GetParticipatedMarketsInteractorImpl(
+            api = get(),
             walletRepository = get(),
         )
     }

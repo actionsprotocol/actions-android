@@ -8,15 +8,15 @@ import app.actionsfun.repository.solana.WalletRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-interface GetParticipatedMarkets {
+interface GetParticipatedMarketsInteractor {
 
     suspend fun get(): List<Market>
 }
 
-internal class GetParticipatedMarketsImpl(
+internal class GetParticipatedMarketsInteractorImpl(
     private val api: ActionsApi,
     private val walletRepository: WalletRepository,
-) : GetParticipatedMarkets {
+) : GetParticipatedMarketsInteractor {
 
     override suspend fun get(): List<Market> {
         return withContext(Dispatchers.IO) {

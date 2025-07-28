@@ -7,6 +7,7 @@ import app.actionsfun.repository.actions.internal.api.model.CreatorFeesData
 import app.actionsfun.repository.actions.internal.api.model.GenerateInstructionRequest
 import app.actionsfun.repository.actions.internal.api.model.GenerateInstructionResponse
 import app.actionsfun.repository.actions.internal.api.model.GetChatMessagesResponse
+import app.actionsfun.repository.actions.internal.api.model.GetClaimResponse
 import app.actionsfun.repository.actions.internal.api.model.GetMarketVaultResponse
 import app.actionsfun.repository.actions.internal.api.model.GetMarketsResponse
 import app.actionsfun.repository.actions.internal.api.model.MarketResponseItem
@@ -32,7 +33,7 @@ internal interface ActionsApi {
     suspend fun getMarketClaim(
         @Path("marketId") marketId: String,
         @Path("userAddress") userAddress: String
-    ): ClaimData
+    ): GetClaimResponse
 
     @GET("api/v2/markets/{marketId}/vault")
     suspend fun getMarketVault(
