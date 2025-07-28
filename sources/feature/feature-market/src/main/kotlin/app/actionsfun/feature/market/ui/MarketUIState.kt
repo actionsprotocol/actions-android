@@ -1,0 +1,58 @@
+package app.actionsfun.feature.market.ui
+
+import app.actionsfun.feature.market.ui.components.market.CommentUI
+import app.actionsfun.feature.market.ui.components.market.MarketUI
+
+
+internal data class MarketUIState(
+    val video: VideoUI?,
+    val market: MarketUI,
+    val deposit: DepositUI,
+    val replies: RepliesUI,
+    val selectedCard: Int,
+) {
+    val pages: Int
+        get() = if (video == null) 3 else 4
+
+    val marketInfoIndex: Int
+        get() = if (video == null) 0 else 1
+
+    val videoIndex: Int
+        get() = if (video == null) -1 else 0
+
+    val depositIndex: Int
+        get() = if (video == null) 1 else 2
+
+    val repliesIndex: Int
+        get() = if (video == null) 2 else 3
+}
+
+internal data class VideoUI(
+    val title: String,
+    val creatorUsername: String,
+    val creatorAvatar: String,
+    val videoUrl: String?,
+)
+
+internal data class DepositUI(
+    val selectedOption: Boolean,
+    val amount: Float,
+    val title: String,
+    val balance: Float,
+    val error: String?,
+    val success: String?,
+    val quickAmounts: List<QuickAmountUI>,
+    val yesPercentage: String,
+    val noPercentage: String,
+    val button: String,
+)
+
+internal data class RepliesUI(
+    val replies: List<CommentUI>,
+    val button: String,
+)
+
+internal data class QuickAmountUI(
+    val value: Float,
+    val label: String,
+)

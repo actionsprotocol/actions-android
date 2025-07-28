@@ -1,4 +1,4 @@
-package app.actionsfun.feature.home.ui.components.market
+package app.actionsfun.feature.market.ui.components.market
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -30,6 +31,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import app.actionsfun.common.ui.components.button.ThreeDimensionalButton
 import app.actionsfun.common.ui.components.threed.Gyroscopic3DLayout
 import app.actionsfun.common.ui.style.AppTheme
 import app.actionsfun.common.ui.style.Body12Regular
@@ -39,9 +41,14 @@ import app.actionsfun.common.ui.style.Heading3
 import app.actionsfun.common.util.Timer
 import app.actionsfun.common.util.timeLeftString
 import app.actionsfun.common.util.timeRelativeString
-import app.actionsfun.feature.home.ui.components.AnimatedNumber
-import app.actionsfun.feature.home.ui.components.Section
-import app.actionsfun.feature.home.ui.components.SectionedArcProgress
+import app.actionsfun.feature.market.ui.components.AnimatedNumber
+import app.actionsfun.feature.market.ui.components.Section
+import app.actionsfun.feature.market.ui.components.SectionedArcProgress
+import app.actionsfun.repository.actions.internal.api.model.MarketUiState
+import app.actionsfun.repository.actions.internal.api.model.UIMarketState
+import app.actionsfun.repository.actions.internal.api.model.isActive
+import app.actionsfun.repository.actions.internal.api.model.isCancelled
+import app.actionsfun.repository.actions.internal.api.model.isFinished
 import coil.compose.AsyncImage
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -64,7 +71,9 @@ internal data class MarketUI(
     val volumeYes: Double,
     val volumeNo: Double,
     val replies: List<CommentUI>,
+    val marketUIState: MarketUiState,
     val accentColor: Color,
+    val button: String,
 )
 
 @Stable
@@ -80,33 +89,52 @@ internal fun Market(
     state: MarketUI,
     modifier: Modifier = Modifier,
 ) {
-    Gyroscopic3DLayout(
-        modifier = modifier,
-        color = Color.White,
-        shape = RoundedCornerShape(32.dp),
-        shadowColor = Color(0xFFEC58A9),
-        shadowAlignment = Alignment.BottomStart,
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(bottom = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Column(
+        Gyroscopic3DLayout(
             modifier = Modifier
-                .fillMaxSize()
-                .border(
-                    width = 2.dp,
-                    color = Color(0xFFEC58A9),
-                    shape = RoundedCornerShape(32.dp)
-                )
-                .padding(all = 24.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp),
-            horizontalAlignment = Alignment.Start,
+                .fillMaxWidth()
+                .weight(1f),
+            color = Color.White,
+            shape = RoundedCornerShape(32.dp),
+            shadowColor = Color(0xFFEC58A9),
+            shadowAlignment = Alignment.BottomStart,
         ) {
-            Header(state)
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .border(
+                        width = 2.dp,
+                        color = Color(0xFFEC58A9),
+                        shape = RoundedCornerShape(32.dp)
+                    )
+                    .padding(all = 24.dp),
+                verticalArrangement = Arrangement.spacedBy(24.dp),
+                horizontalAlignment = Alignment.Start,
+            ) {
+                Header(state)
 
-            MarketDescription(state)
+                MarketDescription(state)
 
-            AboutMarket(state)
+                AboutMarket(state)
 
-            Replies(state)
+                Replies(state)
+            }
         }
+
+        ThreeDimensionalButton(
+            text = state.button,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(52.dp),
+            color = state.accentColor,
+            shadowColor = state.accentColor.copy(alpha = .4f),
+            onClick = {},
+        )
     }
 }
 
@@ -152,22 +180,64 @@ private fun Header(
             )
         }
 
-        Box(
-            modifier = Modifier
-                .border(
-                    color = Color(0xFFE9E9ED),
-                    width = 1.dp,
-                    shape = RoundedCornerShape(24.dp)
-                )
-                .padding(vertical = 6.dp, horizontal = 10.dp),
-            contentAlignment = Alignment.Center,
-        ) {
-            Text(
-                text = endsAt,
-                style = Body16Medium,
-                color = AppTheme.Colors.Text.Primary,
-                modifier = Modifier,
+        MarketStatus(
+            state = state,
+        )
+    }
+}
+
+@Composable
+private fun MarketStatus(
+    state: MarketUI,
+    modifier: Modifier = Modifier,
+) {
+    var endsAt by remember {
+        mutableStateOf(state.endsAt.timeLeftString())
+    }
+
+    LaunchedEffect(Unit) {
+        Timer.endless(rate = 1.seconds).start()
+            .onEach { endsAt = state.endsAt.timeLeftString() }
+            .launchIn(this)
+    }
+
+    Box(
+        modifier = modifier
+            .border(
+                color = Color(0xFFE9E9ED),
+                width = 1.dp,
+                shape = RoundedCornerShape(24.dp)
             )
+            .padding(vertical = 6.dp, horizontal = 10.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        when {
+            state.marketUIState.isActive -> {
+                Text(
+                    text = endsAt,
+                    style = Body16Medium,
+                    color = AppTheme.Colors.Text.Primary,
+                    modifier = Modifier,
+                )
+            }
+
+            state.marketUIState.isFinished -> {
+                Text(
+                    text = "Finished",
+                    style = Body16Medium,
+                    color = AppTheme.Colors.Text.Primary,
+                    modifier = Modifier,
+                )
+            }
+
+            state.marketUIState.isCancelled -> {
+                Text(
+                    text = "Cancelled",
+                    style = Body16Medium,
+                    color = AppTheme.Colors.Text.Primary,
+                    modifier = Modifier,
+                )
+            }
         }
     }
 }
@@ -374,30 +444,27 @@ private fun Replies(
 @Preview
 @Composable
 private fun Preview() {
-    Box(
+    Market(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(vertical = 56.dp, horizontal = 16.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Market(
-            modifier = Modifier
-                .fillMaxSize(),
-            state = MarketUI(
-                address = UUID.randomUUID().toString(),
-                createdAt = OffsetDateTime.now().minusMinutes(24),
-                endsAt = OffsetDateTime.now().plusHours(2).plusMinutes(21),
-                volumeYes = 5.6,
-                volumeNo = 4.4,
-                volume = 10.0,
-                image = "",
-                title = "Will pump.fun have higher trading volume than bonk.fun in exactly 24 hours?",
-                description = "This market will resolve to YES if, exactly 24 hours after creation, pump.fun shows higher total trading volume than bonk.fun. Verification will be based on publicly available sources such as Axiom dashboards or on-chain data explorers.",
-                creatorUsername = "@narracanz",
-                creatorAvatar = "",
-                replies = listOf(),
-                accentColor = Color(0xFFEC58A9)
-            )
+            .fillMaxSize(),
+        state = MarketUI(
+            address = UUID.randomUUID().toString(),
+            createdAt = OffsetDateTime.now().minusMinutes(24),
+            endsAt = OffsetDateTime.now().plusHours(2).plusMinutes(21),
+            volumeYes = 5.6,
+            volumeNo = 4.4,
+            volume = 10.0,
+            image = "",
+            title = "Will pump.fun have higher trading volume than bonk.fun in exactly 24 hours?",
+            description = "This market will resolve to YES if, exactly 24 hours after creation, pump.fun shows higher total trading volume than bonk.fun. Verification will be based on publicly available sources such as Axiom dashboards or on-chain data explorers.",
+            creatorUsername = "@narracanz",
+            creatorAvatar = "",
+            replies = listOf(),
+            marketUIState = MarketUiState(
+                state = UIMarketState.Active,
+            ),
+            accentColor = Color(0xFFEC58A9),
+            button = "Trade",
         )
-    }
+    )
 }
