@@ -2,7 +2,6 @@ package app.actionsfun.feature.onboarding.presentation
 
 import app.actionsfun.common.arch.tea.dsl.DslReducer
 import app.actionsfun.feature.onboarding.presentation.model.OnboardingCommand
-import timber.log.Timber
 import app.actionsfun.feature.onboarding.presentation.model.OnboardingCommand as Command
 import app.actionsfun.feature.onboarding.presentation.model.OnboardingEffect as Effect
 import app.actionsfun.feature.onboarding.presentation.model.OnboardingEvent as Event
@@ -20,19 +19,13 @@ internal class OnboardingReducer : DslReducer<Command, Effect, Event, State>() {
 
     private fun reduceUI(event: UIEvent) {
         when (event) {
-            is UIEvent.ButtonClick -> {
-                commands(Command.GetMarkets)
-                reduceButtonClick(event)
-            }
+            is UIEvent.ButtonClick -> reduceButtonClick(event)
         }
     }
 
     private fun reduceEvent(event: Event) {
         when (event) {
             is Event.OnboardingCompleted -> effects(Effect.OpenHome)
-            is Event.MarketsLoaded -> {
-                Timber.tag("Lounah").d("markets: ${event.markets[event.markets.lastIndex]}")
-            }
             else -> Unit
         }
     }
