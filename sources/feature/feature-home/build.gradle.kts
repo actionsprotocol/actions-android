@@ -3,7 +3,7 @@ plugins {
     id("convention.android-library-compose")
 }
 
-android.namespace = "app.actionsfun.feature.splash"
+android.namespace = "app.actionsfun.feature.home"
 
 dependencies {
     implementation(projects.sources.common.commonUi)
@@ -11,11 +11,17 @@ dependencies {
     implementation(projects.sources.common.commonNetwork)
     implementation(projects.sources.common.commonArch)
     implementation(projects.sources.common.commonNavigation)
+    implementation(projects.sources.repository.repositoryActions)
     implementation(projects.sources.repository.repositoryUser)
     implementation(projects.sources.repository.repositoryOnboarding)
+    implementation(projects.sources.repository.repositorySolana)
+
+    implementation(projects.sources.feature.featureMarket)
+
     implementation(libs.androidxAppcompat)
     implementation(libs.timber)
     implementation(libs.koinAndroid)
+    implementation(libs.koinCompose)
     implementation(libs.coilCore)
     implementation(libs.coilCompose)
     implementation(libs.pageIndicator)
