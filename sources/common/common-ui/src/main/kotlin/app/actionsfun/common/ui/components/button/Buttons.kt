@@ -35,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.unit.Dp
 
 @Composable
 fun PrimaryButton(
@@ -177,11 +178,13 @@ fun ThreeDimensionalButton(
     shadowColor: Color,
     modifier: Modifier = Modifier,
     shadowAlignment: Alignment = Alignment.BottomCenter,
+    shadowSize: Dp = 4.dp,
     onClick: () -> Unit = { }
 ) {
     BaseThreeDimensionalButton(
         color = color,
         shadowColor = shadowColor,
+        shadowSize = shadowSize,
         modifier = modifier,
         shadowAlignment = shadowAlignment,
         onClick = onClick,
@@ -196,12 +199,13 @@ fun ThreeDimensionalButton(
 }
 
 @Composable
-internal fun BaseThreeDimensionalButton(
+fun BaseThreeDimensionalButton(
     color: Color,
     shadowColor: Color,
     modifier: Modifier = Modifier,
     shadowAlignment: Alignment = Alignment.BottomCenter,
     shape: Shape = RoundedCornerShape(32.dp),
+    shadowSize: Dp = 4.dp,
     onClick: () -> Unit = { },
     content: @Composable () -> Unit,
 ) {
@@ -209,13 +213,13 @@ internal fun BaseThreeDimensionalButton(
     val isPressed by interactionSource.collectIsPressedAsState()
 
     val shadowDepth by animateDpAsState(
-        targetValue = 4.dp,
+        targetValue = shadowSize,
         animationSpec = tween(durationMillis = 100),
         label = "shadowDepth"
     )
 
     val buttonOffset by animateDpAsState(
-        targetValue = if (isPressed) 4.dp else 0.dp,
+        targetValue = if (isPressed) shadowSize else 0.dp,
         animationSpec = tween(durationMillis = 100),
         label = "buttonOffset"
     )
@@ -268,8 +272,7 @@ internal fun BaseThreeDimensionalButton(
                     interactionSource = interactionSource,
                     indication = null,
                     onClick = onClick
-                )
-                .padding(horizontal = 24.dp, vertical = 16.dp),
+                ),
             contentAlignment = Alignment.Center
         ) {
             content()
@@ -294,7 +297,7 @@ private fun Preview() {
         )
 
         OutlineIconButton(
-            icon = R.drawable.ic_eye,
+            icon = R.drawable.ic_solana,
             onClick = {},
         )
 

@@ -32,7 +32,7 @@ fun Gyroscopic3DLayout(
     shadowColor: Color,
     modifier: Modifier = Modifier,
     shadowAlignment: Alignment = Alignment.BottomEnd,
-    shadowDepth: Dp = 4.dp,
+    shadowDepth: Dp = 2.dp,
     shape: Shape = RoundedCornerShape(16.dp),
     sensitivity: Float = 10f,
     maxShadowOffset: Dp = 4.dp,
