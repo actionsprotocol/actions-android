@@ -11,6 +11,11 @@ dependencies {
     api(libs.androidxNavigationCompose)
     implementation(platform(libs.androidxComposeBom))
     implementation(libs.androidxComposeFoundation)
+    implementation(libs.androidxCoreKtx)
+    implementation(libs.androidxActivityKtx)
+    implementation(libs.androidxActivityCompose)
+    implementation(libs.androidxComposeMaterial3)
+    implementation(libs.androidxAppcompat)
     implementation(libs.kotlinReflect)
     implementation(libs.kotlinSerialization)
 }

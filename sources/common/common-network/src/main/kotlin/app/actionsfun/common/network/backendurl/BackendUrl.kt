@@ -7,11 +7,11 @@ sealed interface BackendUrl {
     val app: String
 
     data object Dev : BackendUrl {
-        override val app = ""
+        override val app = "https://actions-backend-azil.onrender.com/"
     }
 
     data object Prod : BackendUrl {
-        override val app = ""
+        override val app = "https://actions-backend-mainnet.onrender.com/"
     }
 
     @Suppress("KotlinConstantConditions")
