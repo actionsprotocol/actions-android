@@ -15,6 +15,7 @@ dependencies {
     api(libs.androidxComposeUiTooling)
     api(libs.androidxComposeUiToolingPreview)
     api(libs.composeShimmer)
+    api(libs.androidxBrowser)
     api(libs.androidxComposeFoundation)
     api(platform(libs.androidxComposeBom))
     implementation(libs.androidxFragmentKtx)

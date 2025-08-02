@@ -9,8 +9,10 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 
-val Heading1 = textStyle(48.sp, FontWeight.Medium)
-val Heading3 = textStyle(20.sp, FontWeight.Medium)
+val Heading1 = textStyle(48.sp, FontWeight.Bold)
+val Heading2 = textStyle(28.sp, FontWeight.Bold)
+val Heading3 = textStyle(24.sp, FontWeight.SemiBold)
+val Heading4 = textStyle(20.sp, FontWeight.Medium)
 
 val Body18Medium = textStyle(18.sp, FontWeight.Medium)
 val Body16Regular = textStyle(16.sp, FontWeight.Normal)
