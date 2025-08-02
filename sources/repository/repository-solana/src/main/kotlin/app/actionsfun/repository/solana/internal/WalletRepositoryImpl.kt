@@ -2,13 +2,11 @@ package app.actionsfun.repository.solana.internal
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import app.actionsfun.common.util.startWith
 import app.actionsfun.repository.preferences.AppPreferences
 import app.actionsfun.repository.preferences.get
@@ -23,6 +21,7 @@ import app.actionsfun.repository.solana.internal.core.rpc.TokenAmount
 import app.actionsfun.repository.solana.internal.wallet.ConnectedWalletPreference
 import app.actionsfun.repository.solana.internal.wallet.MobileWalletAdapterWrapper
 import app.actionsfun.repository.user.UserRepository
+import com.solana.transaction.Transaction
 import java.math.BigInteger
 
 internal class WalletRepositoryImpl(
@@ -128,10 +127,10 @@ internal class WalletRepositoryImpl(
         }
     }
 
-    override suspend fun sendAndConfirmTransaction(transactionBytes: ByteArray): String {
+    override suspend fun sendAndConfirmTransaction(transaction: Transaction): String {
         return withContext(Dispatchers.IO) {
             val signatures = mobileWalletAdapter.signAndSendTransactions(
-                transactions = arrayOf(transactionBytes)
+                transactions = arrayOf(transaction.serialize())
             )
             signatures.firstOrNull() ?: error("No transaction signature returned")
         }

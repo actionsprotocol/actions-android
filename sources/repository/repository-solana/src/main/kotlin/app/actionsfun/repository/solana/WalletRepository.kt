@@ -1,6 +1,7 @@
 package app.actionsfun.repository.solana
 
 import app.actionsfun.repository.solana.internal.core.rpc.TokenAmount
+import com.solana.transaction.Transaction
 import kotlinx.coroutines.flow.Flow
 import java.math.BigInteger
 
@@ -22,5 +23,5 @@ interface WalletRepository {
 
     suspend fun disconnectWallet()
 
-    suspend fun sendAndConfirmTransaction(transactionBytes: ByteArray): String
+    suspend fun sendAndConfirmTransaction(transaction: Transaction): String
 }
