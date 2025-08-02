@@ -15,4 +15,20 @@ interface Navigator {
     fun open(destination: Destination, options: NavigationBuilder.() -> Unit = {})
 
     fun back()
+
+    companion object {
+
+        val None = object : Navigator {
+            override val activity: AppCompatActivity
+                get() = TODO("Not yet implemented")
+
+            override fun open(destination: Destination, options: NavigationBuilder.() -> Unit) {
+                TODO("Not yet implemented")
+            }
+
+            override fun back() {
+                TODO("Not yet implemented")
+            }
+        }
+    }
 }
