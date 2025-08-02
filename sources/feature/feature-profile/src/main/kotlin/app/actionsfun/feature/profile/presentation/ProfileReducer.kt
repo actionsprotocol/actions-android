@@ -21,10 +21,30 @@ internal class ProfileReducer : DslReducer<Command, Effect, Event, State>() {
     private fun reduceUI(event: UIEvent) {
         when (event) {
             is UIEvent.PublicKeyClicked -> {
-
+                state { copy(showWalletOptionsSheet = true) }
             }
-            is UIEvent.ClaimClicked -> commands(Command.ClaimSol(event.marketAddress))
-            is UIEvent.ConnectWalletClick -> commands(ProfileCommand.ConnectWallet)
+            is UIEvent.ShowWalletOptionsSheet -> {
+                state { copy(showWalletOptionsSheet = true) }
+            }
+            is UIEvent.DismissWalletOptionsSheet -> {
+                state { copy(showWalletOptionsSheet = false) }
+            }
+            is UIEvent.DisconnectWalletClicked -> {
+                state { copy(showWalletOptionsSheet = false) }
+                commands(Command.DisconnectWallet)
+            }
+            is UIEvent.CopyAddressClicked -> {
+                state.publicKey?.let { publicKey ->
+                    effects(Effect.CopyToClipboard(publicKey))
+                    state { copy(showWalletOptionsSheet = false) }
+                }
+            }
+            is UIEvent.ClaimClicked -> {
+                commands(Command.ClaimSol(event.marketAddress))
+            }
+            is UIEvent.ConnectWalletClick -> {
+                commands(ProfileCommand.ConnectWallet)
+            }
             is UIEvent.RetryLoadMarketsClick -> {
                 state { copy(isLoading = true, error = null) }
                 commands(ProfileCommand.LoadMarkets)
@@ -69,6 +89,10 @@ internal class ProfileReducer : DslReducer<Command, Effect, Event, State>() {
             is Event.SolClaimed -> {
                 effects(Effect.ShowSuccessToast("Claimed successfully"))
                 commands(Command.LoadMarkets)
+            }
+            
+            is Event.WalletDisconnected -> {
+                state { copy(publicKey = null) }
             }
 
             else -> Unit

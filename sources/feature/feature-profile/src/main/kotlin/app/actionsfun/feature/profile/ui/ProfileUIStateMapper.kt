@@ -54,7 +54,8 @@ internal class ProfileUIStateMapper : UiStateMapper<State, UIState> {
                 url = ""
             ),
             marketsSectionTitle = "Markets",
-            marketsState = marketsState
+            marketsState = marketsState,
+            showWalletOptionsSheet = state.showWalletOptionsSheet
         )
     }
     

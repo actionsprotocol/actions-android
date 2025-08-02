@@ -6,6 +6,7 @@ import app.actionsfun.feature.profile.presentation.ProfileStore
 import app.actionsfun.feature.profile.presentation.ProfileStoreProvider
 import app.actionsfun.feature.profile.presentation.actor.ClaimWinningsActor
 import app.actionsfun.feature.profile.presentation.actor.ConnectWalletActor
+import app.actionsfun.feature.profile.presentation.actor.DisconnectWalletActor
 import app.actionsfun.feature.profile.presentation.actor.LoadMarketsActor
 import app.actionsfun.feature.profile.presentation.actor.ObserveMarketsActor
 import app.actionsfun.feature.profile.presentation.actor.ObserveWalletActor
@@ -35,6 +36,10 @@ val ProfileModule = module {
                         ClaimWinningsActor(claimSolInteractor = get()),
                         ObserveWalletActor(walletRepository = get()),
                         ConnectWalletActor(walletRepository = get()),
+                        DisconnectWalletActor(
+                            walletRepository = get(),
+                            userRepository = get(),
+                        ),
                     ),
                 )
             }

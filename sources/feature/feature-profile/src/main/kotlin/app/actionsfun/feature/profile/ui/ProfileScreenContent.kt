@@ -63,6 +63,9 @@ internal fun ProfileScreenContent(
     urlClick: (String) -> Unit = { Unit },
     retryClick: () -> Unit = { Unit },
     claimClick: (String) -> Unit = { Unit },
+    onDismissWalletOptions: () -> Unit = { Unit },
+    onCopyAddressClick: () -> Unit = { Unit },
+    onDisconnectClick: () -> Unit = { Unit },
 ) {
     Box(
         modifier = modifier
@@ -101,6 +104,14 @@ internal fun ProfileScreenContent(
                 claimClick = claimClick,
             )
         }
+    }
+    
+    if (state.showWalletOptionsSheet) {
+        WalletOptionsBottomSheet(
+            onDismiss = onDismissWalletOptions,
+            onCopyAddressClick = onCopyAddressClick,
+            onDisconnectClick = onDisconnectClick
+        )
     }
 }
 

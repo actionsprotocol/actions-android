@@ -7,6 +7,7 @@ internal data class ProfileState(
     val error: Throwable? = null,
     val publicKey: String? = null,
     val marketsWithClaimStatuses: List<MarketWithClaimStatus> = emptyList(),
+    val showWalletOptionsSheet: Boolean = false,
 ) {
     
     companion object {

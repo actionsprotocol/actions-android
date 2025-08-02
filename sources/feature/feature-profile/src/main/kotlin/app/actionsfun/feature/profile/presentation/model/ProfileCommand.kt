@@ -7,6 +7,8 @@ internal sealed interface ProfileCommand {
     data object ObserveWallet : ProfileCommand
 
     data object ConnectWallet : ProfileCommand
+    
+    data object DisconnectWallet : ProfileCommand
 
     data object LoadMarkets : ProfileCommand
 
