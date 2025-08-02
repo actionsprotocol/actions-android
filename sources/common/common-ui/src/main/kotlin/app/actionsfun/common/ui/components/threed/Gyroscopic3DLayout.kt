@@ -1,5 +1,6 @@
 package app.actionsfun.common.ui.components.threed
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -9,6 +10,7 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 
+@SuppressLint("UseOfNonLambdaOffsetOverload")
 @Composable
 fun Gyroscopic3DLayout(
     color: Color,
@@ -36,7 +39,7 @@ fun Gyroscopic3DLayout(
     shape: Shape = RoundedCornerShape(16.dp),
     sensitivity: Float = 10f,
     maxShadowOffset: Dp = 4.dp,
-    content: @Composable () -> Unit,
+    content: @Composable BoxScope.() -> Unit,
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -144,8 +147,8 @@ fun Gyroscopic3DLayout(
                 .padding(shadowDepth)
                 .clip(shape)
                 .background(color)
-        )
-
-        content()
+        ) {
+            content()
+        }
     }
 }
