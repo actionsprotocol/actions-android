@@ -12,6 +12,7 @@ interface AppColors {
 
     interface TextColors {
         val Primary: Color
+        val PrimaryInversed: Color
         val Secondary: Color
         val Tertiary: Color
         val Disabled: Color
@@ -40,8 +41,9 @@ object AppColorsLight : AppColors {
     }
 
     override val Text = object : AppColors.TextColors {
-        override val Primary = Color(0xFF000000)
-        override val Tertiary = Color(0xFF818181)
+        override val Primary = Color(0xFF1A1A1A)
+        override val PrimaryInversed = Color(0xFFFFFFFF)
+        override val Tertiary = Color(0xFF9FA5AC)
         override val Secondary = Color(0xFF000000).copy(alpha = 0.5f)
         override val Disabled = Color(0xFF000000).copy(alpha = 0.2f)
     }
@@ -65,7 +67,8 @@ object AppColorsDark : AppColors {
 
 
     override val Text = object : AppColors.TextColors {
-        override val Primary = Color(0xFF2ED159)
+        override val Primary = Color(0xFFFFFFFF)
+        override val PrimaryInversed = Color(0xFF1A1A1A)
         override val Secondary = Color(0xFFFFFFFF).copy(alpha = 0.5f)
         override val Tertiary = Color(0xFF818181)
         override val Disabled = Color(0xFF2ED159).copy(alpha = 0.2f)
