@@ -21,4 +21,5 @@ dependencies {
     implementation(libs.androidxFragmentKtx)
     implementation(libs.coilCompose)
     implementation(libs.jsoup)
+    implementation(libs.bundles.exoPlayer)
 }

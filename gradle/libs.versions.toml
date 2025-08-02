@@ -19,6 +19,7 @@ material = "1.12.0"
 navigation = "2.9.0"
 retrofit = "2.11.0"
 room = "2.7.1"
+media3 = "1.7.1"
 
 [plugins]
 
@@ -100,9 +101,14 @@ jsoup = "org.jsoup:jsoup:1.15.3"
 datastore = "androidx.datastore:datastore-preferences:1.1.7"
 pageIndicator = "mx.platacard:compose-pager-indicator:0.0.8"
 
+media3Exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
+media3Ui = { module = "androidx.media3:media3-ui", version.ref = "media3" }
+media3UiCompose = { module = "androidx.media3:media3-ui-compose", version.ref = "media3" }
+
 [bundles]
 
 androidxLifecycle = ["androidxLifecycleViewmodel", "androidxLifecycleLiveData", "androidxLifecycleCommon", "androidxLifecycleExtensions", "androidxLifecycleRuntime"]
 androidxNavigation = ["androidxNavigationRuntime", "androidxNavigationFragment", "androidxNavigationUi"]
 androidxRoom = ["androidxRoomKtx", "androidxRoomRuntime"]
 retrofit = ["retrofitCore", "retrofitGson", "retrofitJson"]
+exoPlayer = ["media3Exoplayer", "media3Ui", "media3UiCompose"]
