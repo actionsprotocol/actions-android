@@ -67,6 +67,9 @@ class AppNavigator(
         config: NavigationConfig
     ) {
         navController.navigate(destination) {
+            if (config.options.contains(ClearStack)) {
+                popUpTo(0) { inclusive = true }
+            }
             if (config.options.contains(SingleTop)) {
                 launchSingleTop = true
             }
