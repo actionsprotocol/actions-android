@@ -17,4 +17,13 @@ sealed interface AppDestination : Destination {
 
     @Serializable
     data object ConnectWallet : AppDestination, Destination.Sheet
+
+    @Serializable
+    data object Profile : AppDestination, Destination.Screen
+
+    @Serializable
+    data class ErrorToast(val text: String) : AppDestination, Destination.Toast
+
+    @Serializable
+    data class SuccessToast(val text: String) : AppDestination, Destination.Toast
 }
