@@ -136,7 +136,8 @@ internal class MarketUIStateMapper : UiStateMapper<State, UIState> {
                 claim?.canClaim == true -> "Claim"
                 else -> "Market is closed"
             },
-            buttonEnabled = (market.uiState.isActive && deposit.amount > 0f)
+            buttonEnabled = walletPublicKey.isNullOrEmpty()
+                    || (market.uiState.isActive && deposit.amount > 0f)
                     || claim?.canClaim == true,
             infoMessage = when {
                 market.uiState.isActive && deposit.amount > balanceSol -> "Insufficient balance"
