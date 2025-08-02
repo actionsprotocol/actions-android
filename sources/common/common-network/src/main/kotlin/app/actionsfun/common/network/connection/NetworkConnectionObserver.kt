@@ -14,9 +14,19 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
+sealed class ConnectionState {
+
+    data class Connected(val network: Network) : ConnectionState()
+
+    data object Disconnected : ConnectionState()
+}
+
+inline val ConnectionState.isConnected: Boolean
+    get() = this is ConnectionState.Connected
+
 interface NetworkConnectionObserver {
 
-    val connection: Flow<Network>
+    val connection: Flow<ConnectionState>
 }
 
 class NetworkConnectionObserverImpl(
@@ -24,7 +34,7 @@ class NetworkConnectionObserverImpl(
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO),
 ) : NetworkConnectionObserver {
 
-    override val connection = MutableSharedFlow<Network>(replay = 1)
+    override val connection = MutableSharedFlow<ConnectionState>(replay = 1)
 
     private val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
@@ -32,14 +42,14 @@ class NetworkConnectionObserverImpl(
         override fun onAvailable(network: Network) {
             super.onAvailable(network)
             scope.launch {
-                connection.emit(network)
+                connection.emit(ConnectionState.Connected(network))
             }
         }
 
         override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
             super.onCapabilitiesChanged(network, networkCapabilities)
             scope.launch {
-                connection.emit(network)
+                connection.emit(ConnectionState.Connected(network))
             }
         }
 
@@ -49,7 +59,11 @@ class NetworkConnectionObserverImpl(
             val activeNetwork = connectivityManager.activeNetwork
             if (activeNetwork != null) {
                 scope.launch {
-                    connection.emit(activeNetwork)
+                    connection.emit(ConnectionState.Connected(network))
+                }
+            } else {
+                scope.launch {
+                    connection.emit(ConnectionState.Disconnected)
                 }
             }
         }
@@ -62,7 +76,7 @@ class NetworkConnectionObserverImpl(
     }
 
     @SuppressLint("MissingPermission")
-    private fun observeConnection(): Flow<Network> = MutableSharedFlow<Network>().also { flow ->
+    private fun observeConnection(): Flow<ConnectionState> = MutableSharedFlow<ConnectionState>().also { flow ->
         val networkRequest = NetworkRequest.Builder()
             .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
             .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
@@ -74,7 +88,7 @@ class NetworkConnectionObserverImpl(
 
         connectivityManager.activeNetwork?.let { network ->
             scope.launch {
-                flow.emit(network)
+                flow.emit(ConnectionState.Connected(network))
             }
         }
     }
