@@ -1,4 +1,4 @@
-package app.actionsfun.feature.home.ui.components
+package app.actionsfun.common.ui.components.market
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -25,7 +25,7 @@ import app.actionsfun.common.ui.rememberAppShimmer
 import com.valentinilk.shimmer.shimmer
 
 @Composable
-internal fun MarketShimmer(
+fun MarketShimmer(
     modifier: Modifier = Modifier,
 ) {
     Gyroscopic3DLayout(
