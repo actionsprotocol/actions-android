@@ -5,22 +5,24 @@ import app.actionsfun.repository.actions.internal.api.model.GenerateInstructionD
 import app.actionsfun.repository.actions.internal.api.model.GenerateInstructionRequest
 import app.actionsfun.repository.actions.internal.api.model.InstructionData
 import app.actionsfun.repository.solana.WalletRepository
-import app.actionsfun.repository.solana.internal.core.AccountMeta
-import app.actionsfun.repository.solana.internal.core.PublicKey
-import app.actionsfun.repository.solana.internal.core.Transaction
-import app.actionsfun.repository.solana.internal.core.instruction.BaseInstruction
+import com.solana.publickey.SolanaPublicKey
+import com.solana.transaction.Message
+import com.solana.transaction.TransactionInstruction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.math.BigDecimal
 
 internal interface CreateTransactionInteractor {
 
     suspend fun createDepositToMarketTransaction(
         marketAddress: String,
-        amountLamports: Long,
+        amountLamports: BigDecimal,
         option: Boolean,
-    ): ByteArray
+    ): com.solana.transaction.Transaction
 
-    suspend fun createClaimSolTransaction(marketAddress: String): ByteArray
+    suspend fun createClaimSolTransaction(
+        marketAddress: String
+    ): com.solana.transaction.Transaction
 }
 
 internal class CreateTransactionInteractorImpl(
@@ -30,9 +32,9 @@ internal class CreateTransactionInteractorImpl(
 
     override suspend fun createDepositToMarketTransaction(
         marketAddress: String,
-        amountLamports: Long,
+        amountLamports: BigDecimal,
         option: Boolean
-    ): ByteArray {
+    ): com.solana.transaction.Transaction {
         return withContext(Dispatchers.IO) {
             val wallet = walletRepository.getWallet()
 
@@ -45,18 +47,18 @@ internal class CreateTransactionInteractorImpl(
                 params = mapOf(
                     "marketAddress" to marketAddress,
                     "option" to option,
-                    "amountLamports" to amountLamports,
+                    "amountLamports" to amountLamports.longValueExact(),
                     "participantAddress" to wallet.publicKey,
                 )
             )
 
-            val transaction = buildTransaction(wallet.publicKey, instructionData.instructions)
-
-            transaction.serialize()
+            instructionData.instructions.buildTransaction()
         }
     }
 
-    override suspend fun createClaimSolTransaction(marketAddress: String): ByteArray {
+    override suspend fun createClaimSolTransaction(
+        marketAddress: String
+    ): com.solana.transaction.Transaction {
         return withContext(Dispatchers.IO) {
             val wallet = walletRepository.getWallet()
 
@@ -72,38 +74,35 @@ internal class CreateTransactionInteractorImpl(
                 )
             )
 
-            val transaction = buildTransaction(wallet.publicKey, instructionData.instructions)
-
-            transaction.serialize()
+            instructionData.instructions.buildTransaction()
         }
     }
 
-    private suspend fun buildTransaction(
-        publicKey: String,
-        instructionsData: List<InstructionData>
-    ): Transaction {
+    private suspend fun List<InstructionData>.buildTransaction(): com.solana.transaction.Transaction {
         val blockhash = walletRepository.getLatestBlockhash()
-        val instructions = instructionsData.map { apiInstruction ->
-            BaseInstruction(
-                programId = PublicKey(apiInstruction.programId),
-                data = apiInstruction.data
-                    .map(Int::toByte)
-                    .toByteArray(),
-                keys = apiInstruction.keys.map { key ->
-                    AccountMeta(
-                        publicKey = PublicKey(key.pubkey),
-                        signer = key.isSigner,
-                        writable = key.isWritable
+        val instructions = map { apiInstruction ->
+            TransactionInstruction(
+                programId = SolanaPublicKey.from(apiInstruction.programId),
+                accounts = apiInstruction.keys.map { key ->
+                    com.solana.transaction.AccountMeta(
+                        publicKey = SolanaPublicKey.from(key.pubkey),
+                        isSigner = key.isSigner,
+                        isWritable = key.isWritable
                     )
                 },
+                data = apiInstruction.data
+                    .map(Int::toByte)
+                    .toByteArray()
             )
         }
+        val message = Message.Builder()
+            .also { builder ->
+                instructions.forEach(builder::addInstruction)
+            }
+            .setRecentBlockhash(blockhash)
+            .build()
 
-        return Transaction(
-            recentBlockhash = blockhash,
-            instructions = instructions,
-            feePayer = PublicKey(publicKey)
-        )
+        return com.solana.transaction.Transaction(message)
     }
 
     private suspend fun generateInstructions(
