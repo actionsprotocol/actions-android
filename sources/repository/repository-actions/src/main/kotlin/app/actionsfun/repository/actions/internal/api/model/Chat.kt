@@ -1,10 +1,9 @@
 package app.actionsfun.repository.actions.internal.api.model
 
-import app.actionsfun.common.network.serialization.OffsetDateTimeSerializer
-import kotlinx.serialization.SerialName
+import androidx.annotation.Keep
 import kotlinx.serialization.Serializable
-import java.time.OffsetDateTime
 
+@Keep
 @Serializable
 internal data class ChatMessage(
     val id: String,
@@ -16,6 +15,7 @@ internal data class ChatMessage(
     val participantInfo: ParticipantInfo? = null
 )
 
+@Keep
 @Serializable
 internal data class GetChatMessagesResponse(
     val success: Boolean,
@@ -26,6 +26,7 @@ internal data class GetChatMessagesResponse(
     val message: String? = null
 )
 
+@Keep
 @Serializable
 internal data class AddChatMessageRequest(
     val publicKey: String,
@@ -33,6 +34,7 @@ internal data class AddChatMessageRequest(
     val content: String,
 )
 
+@Keep
 @Serializable
 internal data class AddChatMessageResponse(
     val success: Boolean,

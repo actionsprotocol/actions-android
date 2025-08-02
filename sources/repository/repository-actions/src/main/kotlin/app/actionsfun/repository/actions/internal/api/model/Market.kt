@@ -1,17 +1,19 @@
 package app.actionsfun.repository.actions.internal.api.model
 
+import androidx.annotation.Keep
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+@Keep
 @Serializable
 internal data class GetMarketsResponse(
     val success: Boolean,
-    val status: Int,
     val error: String? = null,
     val message: String? = null,
     val data: List<SerializedMarket>? = null
 )
 
+@Keep
 @Serializable
 internal data class SerializedMarket(
     val address: String,
@@ -42,6 +44,7 @@ internal data class SerializedMarket(
     val uiState: MarketUiState
 )
 
+@Keep
 @Serializable
 enum class UIMarketState {
     @SerialName("Active")
@@ -72,6 +75,9 @@ enum class UIMarketState {
 inline val MarketUiState.isActive: Boolean
     get() = state in listOf(UIMarketState.Active)
 
+inline val MarketUiState.isDeciding: Boolean
+    get() = state in listOf(UIMarketState.Deciding)
+
 inline val MarketUiState.isCancelled: Boolean
     get() = state in listOf(
         UIMarketState.CanceledByCreator,
@@ -84,9 +90,9 @@ inline val MarketUiState.isFinished: Boolean
     get() = state in listOf(
         UIMarketState.FinalizedYes,
         UIMarketState.FinalizedNo,
-        UIMarketState.Deciding,
     )
 
+@Keep
 @Serializable
 enum class MarketStatus {
     @SerialName("Active")
@@ -105,6 +111,7 @@ enum class MarketStatus {
     AutoCanceled
 }
 
+@Keep
 @Serializable
 enum class WinningOptionType {
     @SerialName("yes")
@@ -114,12 +121,14 @@ enum class WinningOptionType {
     No
 }
 
+@Keep
 @Serializable
 data class MarketUiState(
     val state: UIMarketState,
     val winningOption: WinningOptionType? = null
 )
 
+@Keep
 @Serializable
 internal data class MarketResponseItem(
     val publicKey: String,
@@ -127,6 +136,7 @@ internal data class MarketResponseItem(
     val participants: List<SerializedParticipant>? = null
 )
 
+@Keep
 @Serializable
 internal data class GetMarketResponse(
     val success: Boolean,
@@ -136,6 +146,7 @@ internal data class GetMarketResponse(
     val data: SerializedMarket? = null
 )
 
+@Keep
 @Serializable
 internal data class MarketVaultData(
     @SerialName("poolId")
@@ -143,6 +154,7 @@ internal data class MarketVaultData(
     val vaultAddress: String
 )
 
+@Keep
 @Serializable
 internal data class GetMarketVaultResponse(
     val success: Boolean,

@@ -1,9 +1,9 @@
 package app.actionsfun.repository.actions.internal.api.model
 
-import app.actionsfun.common.network.serialization.OffsetDateTimeSerializer
+import androidx.annotation.Keep
 import kotlinx.serialization.Serializable
-import java.time.OffsetDateTime
 
+@Keep
 @Serializable
 internal data class GetParticipantsResponse(
     val success: Boolean,
@@ -13,6 +13,7 @@ internal data class GetParticipantsResponse(
     val data: List<SerializedParticipant>? = null
 )
 
+@Keep
 @Serializable
 internal data class SerializedParticipant(
     val publicKey: String,
@@ -21,6 +22,7 @@ internal data class SerializedParticipant(
     val timestamp: Long
 )
 
+@Keep
 @Serializable
 internal data class ParticipantInfo(
     val amount: String,

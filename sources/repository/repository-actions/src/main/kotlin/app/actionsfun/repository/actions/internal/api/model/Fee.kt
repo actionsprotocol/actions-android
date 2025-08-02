@@ -1,7 +1,9 @@
 package app.actionsfun.repository.actions.internal.api.model
 
+import androidx.annotation.Keep
 import kotlinx.serialization.Serializable
 
+@Keep
 @Serializable
 internal data class CreatorFeesData(
     val marketId: String,
@@ -11,6 +13,7 @@ internal data class CreatorFeesData(
     val accountExists: Boolean
 )
 
+@Keep
 @Serializable
 internal data class GetCreatorFeesResponse(
     val success: Boolean,

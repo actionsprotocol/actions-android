@@ -1,8 +1,10 @@
 package app.actionsfun.repository.actions.internal.api.model
 
+import androidx.annotation.Keep
 import app.actionsfun.common.network.serialization.AnySerializer
 import kotlinx.serialization.Serializable
 
+@Keep
 @Serializable
 internal data class InstructionKey(
     val pubkey: String,
@@ -10,6 +12,7 @@ internal data class InstructionKey(
     val isWritable: Boolean
 )
 
+@Keep
 @Serializable
 internal data class InstructionData(
     val programId: String,
@@ -17,12 +20,14 @@ internal data class InstructionData(
     val data: List<Int>
 )
 
+@Keep
 @Serializable
 internal data class GenerateInstructionData(
     val instructions: List<InstructionData>,
     val type: String
 )
 
+@Keep
 @Serializable
 internal data class GenerateInstructionResponse(
     val success: Boolean,
@@ -31,12 +36,14 @@ internal data class GenerateInstructionResponse(
     val message: String? = null
 )
 
+@Keep
 @Serializable
 internal data class GenerateInstructionRequest(
     val type: String,
     val params: Map<String, @Serializable(with = AnySerializer::class) Any?>
 )
 
+@Keep
 @Serializable
 internal data class DepositInstructionParams(
     val marketAddress: String,
@@ -45,12 +52,14 @@ internal data class DepositInstructionParams(
     val participantAddress: String
 )
 
+@Keep
 @Serializable
 internal data class ClaimSolInstructionParams(
     val marketAddress: String,
     val participantAddress: String
 )
 
+@Keep
 @Serializable
 internal data class CreateMarketInstructionParams(
     val marketName: String,
@@ -61,6 +70,7 @@ internal data class CreateMarketInstructionParams(
     val finalizationDeadline: String
 )
 
+@Keep
 @Serializable
 internal data class FinishMarketInstructionParams(
     val marketAddress: String,
@@ -68,6 +78,7 @@ internal data class FinishMarketInstructionParams(
     val creatorAddress: String
 )
 
+@Keep
 @Serializable
 internal data class CreatorClaimFeesInstructionParams(
     val marketAddress: String,
