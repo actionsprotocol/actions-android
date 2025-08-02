@@ -13,6 +13,7 @@ dependencies {
     implementation(projects.sources.common.commonNavigation)
     implementation(projects.sources.repository.repositoryActions)
     implementation(projects.sources.repository.repositoryUser)
+    implementation(projects.sources.repository.repositorySolana)
     implementation(projects.sources.repository.repositoryOnboarding)
     implementation(libs.androidxAppcompat)
     implementation(libs.timber)
