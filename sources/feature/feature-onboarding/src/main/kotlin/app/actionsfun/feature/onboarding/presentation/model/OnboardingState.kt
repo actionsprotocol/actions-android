@@ -15,7 +15,7 @@ internal data class OnboardingState(
                 OnboardingScreenState(
                     image = R.drawable.onboarding_0,
                     button = OnboardingButton.Default("Continue"),
-                    color = Color(0xFFF6C635)
+                    color = Color(0xFF87F39A)
                 ),
                 OnboardingScreenState(
                     image = R.drawable.onboarding_1,
@@ -25,7 +25,7 @@ internal data class OnboardingState(
                 OnboardingScreenState(
                     image = R.drawable.onboarding_2,
                     button = OnboardingButton.Default("Let's go!"),
-                    color = Color(0xFFF3D1DC)
+                    color = Color(0xFFF6C635)
                 ),
             ),
             selectedScreen = 0,
