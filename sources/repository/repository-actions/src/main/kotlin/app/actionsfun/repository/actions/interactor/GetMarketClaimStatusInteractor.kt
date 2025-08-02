@@ -33,10 +33,10 @@ internal class GetMarketClaimStatusInteractorImpl(
                 canClaim = claimData?.canClaim ?: false,
                 alreadyClaimed = claimData?.alreadyClaimed ?: false,
                 claimableAmount = claimData?.claimableAmount ?: "0",
-                claimableAmountSol = claimData?.claimableAmountSol ?: 0.0,
-                multiplier = claimData?.multiplier ?: 0.0,
+                claimableAmountSol = claimData?.claimableAmountSol ?: 0f,
+                multiplier = claimData?.multiplier ?: 0f,
                 userBet = claimData?.userBet ?: "0",
-                userBetSol = claimData?.userBetSol ?: 0.0,
+                userBetSol = claimData?.userBetSol ?: 0f,
                 userOption = claimData?.userOption ?: false,
                 winningOption = claimData?.winningOption ?: false,
             )
