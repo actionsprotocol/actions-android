@@ -52,6 +52,7 @@ val ActionsRepositoryModule = module {
     single<GetMarketInteractor> {
         GetMarketInteractorImpl(
             api = get(),
+            getPinataMetadata = get(),
         )
     }
 
