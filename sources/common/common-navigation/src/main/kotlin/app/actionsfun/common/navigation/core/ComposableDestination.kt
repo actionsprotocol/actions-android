@@ -28,16 +28,30 @@ inline fun <reified T : Destination.Screen> NavGraphBuilder.destination(
                 None -> null
             }
         },
-        exitTransition = null,
+        exitTransition = {
+            when (animate) {
+                SlideUp -> slideOutVertically { height -> -height } // Slide up and out of view
+                SlideRight -> slideOutHorizontally { width -> -width } // Slide left and out of view
+                Fade -> fadeOut()
+                None -> null
+            }
+        },
         popEnterTransition = {
             when (animate) {
-                SlideUp -> slideInVertically { height -> -height } // Reverse: slide down from top
-                SlideRight -> slideInHorizontally { width -> -width } // Reverse: slide in from left
+                SlideUp -> slideInVertically { height -> -height } // Slide down from top when returning
+                SlideRight -> slideInHorizontally { width -> -width } // Slide in from left when returning
                 Fade -> fadeIn()
                 None -> null
             }
         },
-        popExitTransition = null
+        popExitTransition = {
+            when (animate) {
+                SlideUp -> slideOutVertically { height -> height } // Slide down and out when going back
+                SlideRight -> slideOutHorizontally { width -> width } // Slide right and out when going back
+                Fade -> fadeOut()
+                None -> null
+            }
+        }
     ) { backstack ->
         content(backstack.toRoute<T>())
     }
