@@ -1,6 +1,7 @@
 package app.actionsfun.feature.home.presentation
 
 import app.actionsfun.common.arch.tea.dsl.DslReducer
+import timber.log.Timber
 import app.actionsfun.feature.home.presentation.model.HomeCommand as Command
 import app.actionsfun.feature.home.presentation.model.HomeEffect as Effect
 import app.actionsfun.feature.home.presentation.model.HomeEvent as Event
@@ -46,6 +47,10 @@ internal class HomeReducer : DslReducer<Command, Effect, Event, State>() {
 
             is Event.ConnectedWalletChanged -> {
                 state { copy(publicKey = event.publicKey) }
+            }
+
+            is Event.ConnectWalletFailed -> {
+                effects(Effect.ShowErrorToast("Something went wrong"))
             }
 
             else -> Unit

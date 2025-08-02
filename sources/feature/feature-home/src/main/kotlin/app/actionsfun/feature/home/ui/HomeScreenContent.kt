@@ -1,6 +1,8 @@
 package app.actionsfun.feature.home.ui
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
@@ -39,16 +42,19 @@ import com.valentinilk.shimmer.shimmer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextAlign
+import app.actionsfun.common.navigation.core.Navigator
 import app.actionsfun.common.ui.components.button.ThreeDimensionalButton
-import app.actionsfun.feature.home.ui.components.MarketShimmer
+import app.actionsfun.common.ui.components.market.MarketShimmer
+import app.actionsfun.common.ui.components.pager.PagerStateObserver
 import app.actionsfun.feature.market.ui.MarketScreen
 import org.koin.compose.koinInject
-import timber.log.Timber
 
 @Composable
 internal fun HomeScreenContent(
     state: HomeUIState,
+    navigator: Navigator,
     modifier: Modifier = Modifier,
     connectWalletClick: () -> Unit = { Unit },
     profileClick: () -> Unit = { Unit },
@@ -57,6 +63,7 @@ internal fun HomeScreenContent(
     Column(
         modifier = modifier
             .statusBarsPadding()
+            .navigationBarsPadding()
             .background(AppTheme.Colors.Background.Primary)
             .fillMaxSize(),
     ) {
@@ -70,9 +77,9 @@ internal fun HomeScreenContent(
 
         Markets(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(vertical = 16.dp),
+                .fillMaxSize(),
             state = state,
+            navigator = navigator,
             retryClick = retryLoadingClick,
         )
     }
@@ -182,13 +189,14 @@ private fun Wallet(
 @Composable
 private fun Markets(
     state: HomeUIState,
+    navigator: Navigator,
     modifier: Modifier = Modifier,
     retryClick: () -> Unit = { Unit },
 ) {
-    AnimatedContent(
+    Crossfade(
         modifier = modifier,
         targetState = state,
-        transitionSpec = { fadeIn() togetherWith fadeOut() }
+        animationSpec = tween(durationMillis = 300)
     ) { marketsState ->
         when (marketsState) {
             is HomeUIState.Loading -> {
@@ -215,6 +223,7 @@ private fun Markets(
             is HomeUIState.Success -> {
                 SuccessState(
                     state = marketsState,
+                    navigator = navigator,
                 )
             }
         }
@@ -260,9 +269,15 @@ private fun ErrorState(
 @Composable
 private fun SuccessState(
     state: HomeUIState.Success,
+    navigator: Navigator,
     modifier: Modifier = Modifier,
 ) {
     val pagerState = rememberPagerState { state.markets.size }
+    val keyboard = LocalSoftwareKeyboardController.current
+
+    PagerStateObserver(
+        pagerState = pagerState,
+    ) { _, _ -> keyboard?.hide() }
 
     VerticalPager(
         modifier = modifier
@@ -271,6 +286,7 @@ private fun SuccessState(
     ) { page ->
         MarketScreen(
             marketAddress = state.markets[page].address,
+            navigator = navigator,
             storeProvider = koinInject(),
         )
     }
@@ -280,6 +296,7 @@ private fun SuccessState(
 @Composable
 private fun Preview() {
     HomeScreenContent(
-        state = HomeUIState.Default
+        state = HomeUIState.Default,
+        navigator = Navigator.None,
     )
 }

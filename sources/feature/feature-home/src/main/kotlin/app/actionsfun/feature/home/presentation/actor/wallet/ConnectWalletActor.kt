@@ -16,7 +16,10 @@ internal class ConnectWalletActor(
 
     override fun act(commands: Flow<Command>): Flow<Event> {
         return commands.filterIsInstance<ConnectWallet>()
-            .onEach { walletRepository.connectWallet() }
-            .mapLatest { Event.EmptyEvent }
+            .mapLatest {
+                runCatching { walletRepository.connectWallet() }
+                    .mapCatching { Event.EmptyEvent }
+                    .getOrElse { Event.ConnectWalletFailed }
+            }
     }
 }

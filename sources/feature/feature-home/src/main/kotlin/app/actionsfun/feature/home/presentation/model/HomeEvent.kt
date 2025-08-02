@@ -21,6 +21,8 @@ internal sealed interface HomeEvent {
     ) : HomeEvent
 
     data object EmptyEvent : HomeEvent
+
+    data object ConnectWalletFailed : HomeEvent
 }
 
 internal sealed interface HomeUIEvent : HomeEvent {
