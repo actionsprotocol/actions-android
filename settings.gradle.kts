@@ -31,11 +31,13 @@ include(
 
     ":sources:repository:repository-actions",
     ":sources:repository:repository-onboarding",
+    ":sources:repository:repository-pinata",
     ":sources:repository:repository-preferences",
     ":sources:repository:repository-solana",
     ":sources:repository:repository-user",
 
     ":sources:feature:feature-splash",
+    ":sources:feature:feature-profile",
     ":sources:feature:feature-onboarding",
     ":sources:feature:feature-home",
     ":sources:feature:feature-market",
