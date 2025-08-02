@@ -170,16 +170,6 @@ private fun Header(
     modifier: Modifier = Modifier,
     profileClick: (String) -> Unit = { Unit },
 ) {
-    var endsAt by remember {
-        mutableStateOf(state.endsAt.timeLeftString())
-    }
-
-    LaunchedEffect(Unit) {
-        Timer.endless(rate = 1.seconds).start()
-            .onEach { endsAt = state.endsAt.timeLeftString() }
-            .launchIn(this)
-    }
-
     Row(
         modifier = modifier
             .fillMaxWidth()

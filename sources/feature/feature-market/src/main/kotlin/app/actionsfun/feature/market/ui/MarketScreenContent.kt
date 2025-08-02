@@ -36,12 +36,14 @@ import app.actionsfun.common.ui.style.AppTheme
 import app.actionsfun.feature.market.ui.components.market.Deposit
 import app.actionsfun.feature.market.ui.components.market.Market
 import app.actionsfun.feature.market.ui.components.market.RepliesCard
+import app.actionsfun.feature.market.ui.components.market.Video
 import kotlinx.coroutines.launch
 
 @Composable
 internal fun MarketScreenContent(
     state: MarketUIState,
     modifier: Modifier = Modifier,
+    isVerticallyVisible: Boolean = true,
     depositQuickAmountClick: (Float) -> Unit = { Unit },
     depositOptionClick: (Boolean) -> Unit = { Unit },
     depositValueChange: (Float) -> Unit = { Unit },
@@ -96,7 +98,15 @@ internal fun MarketScreenContent(
         ) { page ->
             when (page) {
                 state.videoIndex -> {
-
+                    state.video?.let { video ->
+                        Video(
+                            state = video,
+                            playWhenReady = isVerticallyVisible && (pagerState.currentPage == page),
+                            buttonClick = {
+                                scrollToPage(state.depositIndex)
+                            }
+                        )
+                    }
                 }
                 state.marketInfoIndex -> {
                     Crossfade(

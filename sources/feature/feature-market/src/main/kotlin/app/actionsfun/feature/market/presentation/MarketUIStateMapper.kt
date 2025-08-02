@@ -3,11 +3,14 @@ package app.actionsfun.feature.market.presentation
 import androidx.compose.ui.graphics.Color
 import app.actionsfun.common.arch.tea.component.UiStateMapper
 import app.actionsfun.common.ui.avatar.avatarByWalletAddress
+import app.actionsfun.common.ui.market.MarketStatusUI
 import app.actionsfun.feature.market.ui.DepositUI
 import app.actionsfun.feature.market.ui.QuickAmountUI
 import app.actionsfun.feature.market.ui.RepliesUI
+import app.actionsfun.feature.market.ui.VideoUI
 import app.actionsfun.feature.market.ui.components.market.CommentUI
 import app.actionsfun.feature.market.ui.components.market.MarketUI
+import app.actionsfun.repository.actions.internal.api.model.UIMarketState
 import app.actionsfun.repository.actions.internal.api.model.isActive
 
 import app.actionsfun.feature.market.presentation.model.MarketState as State
@@ -19,7 +22,25 @@ internal class MarketUIStateMapper : UiStateMapper<State, UIState> {
         val market = state.market
 
         return UIState(
-            video = null,
+            video = market?.let { market ->
+                VideoUI(
+                    title = market.market.title,
+                    creatorUsername = market.market.creatorTwitterUsername,
+                    createdAt = market.market.createdAt,
+                    marketStatusUI = when (market.market.uiState.state) {
+                        UIMarketState.FinalizedYes -> MarketStatusUI.Finished(true)
+                        UIMarketState.FinalizedNo -> MarketStatusUI.Finished(false)
+                        UIMarketState.Deciding -> MarketStatusUI.Deciding
+                        UIMarketState.Active -> MarketStatusUI.Active(endsAt = market.market.endsAt)
+                        UIMarketState.FinalizedNoParticipantsNo,
+                        UIMarketState.FinalizedNoParticipantsYes,
+                        UIMarketState.AutoCanceled,
+                        UIMarketState.CanceledByCreator -> MarketStatusUI.Cancelled
+                    },
+                    videoUrl = market.market.video,
+                    button = "Trade",
+                )
+            }?.takeIf { video -> !video.videoUrl.isNullOrEmpty() },
             market = market?.let {
                 MarketUI(
                     address = market.market.address,

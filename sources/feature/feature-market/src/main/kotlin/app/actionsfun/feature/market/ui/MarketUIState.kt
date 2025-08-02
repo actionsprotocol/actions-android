@@ -1,7 +1,9 @@
 package app.actionsfun.feature.market.ui
 
+import app.actionsfun.common.ui.market.MarketStatusUI
 import app.actionsfun.feature.market.ui.components.market.CommentUI
 import app.actionsfun.feature.market.ui.components.market.MarketUI
+import java.time.OffsetDateTime
 
 
 internal data class MarketUIState(
@@ -30,8 +32,10 @@ internal data class MarketUIState(
 internal data class VideoUI(
     val title: String,
     val creatorUsername: String,
-    val creatorAvatar: String,
+    val createdAt: OffsetDateTime,
+    val marketStatusUI: MarketStatusUI,
     val videoUrl: String?,
+    val button: String,
 )
 
 internal data class DepositUI(

@@ -287,6 +287,7 @@ private fun SuccessState(
         MarketScreen(
             marketAddress = state.markets[page].address,
             navigator = navigator,
+            isVerticallyVisible = pagerState.currentPage == page,
             storeProvider = koinInject(),
         )
     }

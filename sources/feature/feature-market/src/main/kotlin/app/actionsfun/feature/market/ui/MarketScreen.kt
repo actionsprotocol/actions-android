@@ -25,6 +25,7 @@ fun MarketScreen(
     marketAddress: String,
     navigator: Navigator,
     storeProvider: MarketStoreProvider,
+    isVerticallyVisible: Boolean,
 ) {
     val store = viewModel<MarketStore>(
         factory = storeProvider.viewModelFactory(marketAddress),
@@ -51,6 +52,7 @@ fun MarketScreen(
 
     MarketScreenContent(
         state = state,
+        isVerticallyVisible = isVerticallyVisible,
         depositOptionClick = { store.accept(DepositOptionChanged(it)) },
         depositQuickAmountClick = { store.accept(DepositQuickAmountClicked(it)) },
         depositValueChange = { store.accept(DepositAmountChanged(it)) },
