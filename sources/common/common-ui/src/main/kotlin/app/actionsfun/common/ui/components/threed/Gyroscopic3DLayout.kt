@@ -144,8 +144,8 @@ fun Gyroscopic3DLayout(
                 .padding(shadowDepth)
                 .clip(shape)
                 .background(color)
-        ) {
-            content()
-        }
+        )
+
+        content()
     }
 }
