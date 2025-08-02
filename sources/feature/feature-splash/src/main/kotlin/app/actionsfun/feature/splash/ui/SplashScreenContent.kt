@@ -1,5 +1,6 @@
 package app.actionsfun.feature.splash.ui
 
+import android.graphics.Paint.Align
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,14 +13,19 @@ import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.dp
+import app.actionsfun.feature.splash.R
 
 
 @Composable
@@ -36,8 +42,15 @@ internal fun SplashScreenContent(
         modifier = modifier
             .background(AppTheme.Colors.Background.Primary)
             .fillMaxSize(),
+        contentAlignment = Alignment.Center,
     ) {
-        SpinningLetterAnimation()
+        Icon(
+            modifier = Modifier
+                .size(120.dp),
+            tint = AppTheme.Colors.Text.Primary.copy(alpha = .1f),
+            painter = painterResource(id = app.actionsfun.common.ui.R.drawable.app_logo),
+            contentDescription = null,
+        )
     }
 }
 
