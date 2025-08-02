@@ -19,4 +19,17 @@ data class Market(
     val uiState: MarketUiState,
     val video: String? = null,
     val participants: List<Participant>,
-)
+) {
+
+    val yesPercentage: Int
+        get() = when {
+            volume == 0f -> 50
+            else -> (yesVolume / volume * 100).toInt()
+        }
+
+    val noPercentage: Int
+        get() = when {
+            volume == 0f -> 50
+            else -> (noVolume / volume * 100).toInt()
+        }
+}
