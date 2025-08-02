@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +32,7 @@ fun ExoPlayer(
     modifier: Modifier = Modifier,
     @SuppressLint("UnsafeOptInUsageError") surfaceType: @SurfaceType Int = SURFACE_TYPE_SURFACE_VIEW,
     useCache: Boolean = true,
+    playWhenReady: Boolean = true,
     preview: @Composable () -> Unit = {},
     configure: ExoPlayer.() -> Unit = {},
 ) {
@@ -38,6 +40,7 @@ fun ExoPlayer(
         sources = listOf(source),
         modifier = modifier,
         surfaceType = surfaceType,
+        playWhenReady = playWhenReady,
         useCache = useCache,
         preview = preview,
         configure = configure,
@@ -51,6 +54,7 @@ fun ExoPlayer(
     modifier: Modifier = Modifier,
     @SuppressLint("UnsafeOptInUsageError") surfaceType: @SurfaceType Int = SURFACE_TYPE_SURFACE_VIEW,
     useCache: Boolean = true,
+    playWhenReady: Boolean = true,
     preview: @Composable () -> Unit = {},
     configure: ExoPlayer.() -> Unit = {},
 ) {
@@ -71,10 +75,15 @@ fun ExoPlayer(
         }
     }
 
+    LaunchedEffect(playWhenReady) {
+        player?.playWhenReady = playWhenReady
+    }
+
     player?.let { exoPlayer ->
         MediaPlayerScreen(
             player = exoPlayer,
             surfaceType = surfaceType,
+            modifier = modifier,
         )
     }
 }
@@ -93,7 +102,7 @@ private fun MediaPlayerScreen(
             player = player,
             surfaceType = surfaceType,
             modifier = Modifier.resizeWithContentScale(
-                ContentScale.Inside,
+                ContentScale.Crop,
                 presentationState.videoSizeDp
             ),
         )

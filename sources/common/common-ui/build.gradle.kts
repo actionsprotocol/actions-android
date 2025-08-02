@@ -18,8 +18,9 @@ dependencies {
     api(libs.androidxBrowser)
     api(libs.androidxComposeFoundation)
     api(platform(libs.androidxComposeBom))
+    api(libs.bundles.exoPlayer)
     implementation(libs.androidxFragmentKtx)
     implementation(libs.coilCompose)
     implementation(libs.jsoup)
-    implementation(libs.bundles.exoPlayer)
+    implementation(projects.sources.common.commonUtil)
 }
