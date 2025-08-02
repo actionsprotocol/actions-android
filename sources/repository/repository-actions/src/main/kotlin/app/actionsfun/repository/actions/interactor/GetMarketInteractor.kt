@@ -9,6 +9,7 @@ import app.actionsfun.repository.actions.internal.util.lamportsToSOL
 import app.actionsfun.repository.actions.internal.util.parseTimestamp
 import app.actionsfun.repository.actions.internal.util.toParticipant
 import app.actionsfun.repository.actions.internal.util.toReply
+import app.actionsfun.repository.pinata.interactor.GetPinataMetadata
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -19,6 +20,7 @@ interface GetMarketInteractor {
 
 internal class GetMarketInteractorImpl(
     private val api: ActionsApi,
+    private val getPinataMetadata: GetPinataMetadata,
 ) : GetMarketInteractor {
 
     override suspend fun get(marketAddress: String): Market {
@@ -33,12 +35,13 @@ internal class GetMarketInteractorImpl(
         participants: List<SerializedParticipant>,
     ): Market {
         val chatMessages = fetchChatMessages(market.address)
+        val metadata = getPinataMetadata.get(market.metadataUri)
 
         return Market(
             address = market.address,
             title = market.name,
             description = market.description,
-            image = market.metadataUri,
+            image = metadata.image,
             creatorTwitterUsername = market.creatorTwitterUsername.orEmpty(),
             creatorTwitterImage = market.creatorTwitterImage.orEmpty(),
             createdAt = market.createdTimestamp.parseTimestamp(),
