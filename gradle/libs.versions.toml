@@ -75,6 +75,7 @@ androidXWorker = "androidx.work:work-runtime-ktx:2.10.1"
 
 # Other
 androidBrowserHelper = "com.google.androidbrowserhelper:androidbrowserhelper:2.5.0"
+androidxBrowser = "androidx.browser:browser:1.8.0"
 commonsConfiguration = "commons-configuration:commons-configuration:1.10"
 coilCompose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 coilCore = { module = "io.coil-kt:coil", version.ref = "coil" }
@@ -91,6 +92,9 @@ retrofitGson = { module = "com.squareup.retrofit2:converter-gson", version.ref =
 retrofitJson = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
 timber = "com.jakewharton.timber:timber:4.7.1"
 solanaMobile = "com.solanamobile:mobile-wallet-adapter-clientlib-ktx:2.0.3"
+solanaRpcCore = "com.solanamobile:rpc-core:0.2.8"
+solanaRpcSolana = "com.solanamobile:rpc-solana:0.2.8"
+solanaWeb3 = "com.solanamobile:web3-solana:0.2.5"
 solana = "org.sol4k:sol4k:0.5.14"
 jsoup = "org.jsoup:jsoup:1.15.3"
 datastore = "androidx.datastore:datastore-preferences:1.1.7"
