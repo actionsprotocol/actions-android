@@ -38,48 +38,6 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 
 @Composable
-fun PrimaryButton(
-    text: String,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    content: @Composable RowScope.() -> Unit = {
-        Text(
-            text = text,
-            style = Body14Medium.applyColor(
-                if (enabled) AppTheme.Colors.Background.Primary else AppTheme.Colors.Text.Disabled
-            ),
-            maxLines = 1,
-            overflow = TextOverflow.MiddleEllipsis,
-            textAlign = TextAlign.Center
-        )
-    },
-) {
-    Button(
-        onClick = onClick,
-        modifier = modifier
-            .fillMaxWidth()
-            .height(48.dp),
-        enabled = enabled,
-        shape = RectangleShape,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = AppTheme.Colors.Text.Primary,
-            contentColor = AppTheme.Colors.Core.Primary,
-            disabledContainerColor = AppTheme.Colors.Core.Secondary.copy(alpha = 0.5f),
-            disabledContentColor = AppTheme.Colors.Text.Disabled
-        ),
-        elevation = ButtonDefaults.buttonElevation(
-            defaultElevation = 0.dp,
-            pressedElevation = 0.dp,
-            hoveredElevation = 0.dp,
-            focusedElevation = 0.dp
-        )
-    ) {
-        content()
-    }
-}
-
-@Composable
 fun OutlineIconButton(
     onClick: () -> Unit,
     @DrawableRes icon: Int,
@@ -177,8 +135,10 @@ fun ThreeDimensionalButton(
     color: Color,
     shadowColor: Color,
     modifier: Modifier = Modifier,
+    textColor: Color = Color.White,
     shadowAlignment: Alignment = Alignment.BottomCenter,
     shadowSize: Dp = 4.dp,
+    clickable: Boolean = true,
     onClick: () -> Unit = { }
 ) {
     BaseThreeDimensionalButton(
@@ -187,11 +147,13 @@ fun ThreeDimensionalButton(
         shadowSize = shadowSize,
         modifier = modifier,
         shadowAlignment = shadowAlignment,
+        clickable = clickable,
         onClick = onClick,
     ) {
         Text(
+            modifier = Modifier,
             text = text,
-            color = Color(0xFFF8F9FA),
+            color = textColor,
             fontSize = 18.sp,
             fontWeight = FontWeight.Medium
         )
@@ -206,6 +168,7 @@ fun BaseThreeDimensionalButton(
     shadowAlignment: Alignment = Alignment.BottomCenter,
     shape: Shape = RoundedCornerShape(32.dp),
     shadowSize: Dp = 4.dp,
+    clickable: Boolean = true,
     onClick: () -> Unit = { },
     content: @Composable () -> Unit,
 ) {
@@ -251,7 +214,8 @@ fun BaseThreeDimensionalButton(
     }
 
     Box(
-        modifier = modifier
+        modifier = modifier,
+        contentAlignment = Alignment.Center,
     ) {
         Box(
             modifier = Modifier
@@ -259,7 +223,7 @@ fun BaseThreeDimensionalButton(
                 .offset(x = shadowOffsetX, y = shadowOffsetY)
                 .clip(shape)
                 .background(shadowColor)
-                .clickable { onClick() }
+                .clickable(enabled = clickable) { onClick() }
         )
 
         Box(
@@ -269,13 +233,20 @@ fun BaseThreeDimensionalButton(
                 .clip(shape)
                 .background(color)
                 .clickable(
+                    enabled = clickable,
                     interactionSource = interactionSource,
                     indication = null,
                     onClick = onClick
                 ),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
-            content()
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                content()
+            }
         }
     }
 }
