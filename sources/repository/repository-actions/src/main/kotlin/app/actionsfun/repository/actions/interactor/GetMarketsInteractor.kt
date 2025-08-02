@@ -3,13 +3,10 @@ package app.actionsfun.repository.actions.interactor
 import app.actionsfun.repository.actions.interactor.model.Market
 import app.actionsfun.repository.actions.internal.api.ActionsApi
 import app.actionsfun.repository.actions.internal.api.model.SerializedMarket
-import app.actionsfun.repository.actions.internal.api.model.ChatMessage
+import app.actionsfun.repository.actions.internal.api.model.MarketResponseItem
 import app.actionsfun.repository.actions.internal.util.parseTimestamp
 import app.actionsfun.repository.actions.internal.util.lamportsToSOL
-import app.actionsfun.repository.actions.internal.util.toReply
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 
 interface GetMarketsInteractor {
@@ -24,8 +21,11 @@ internal class GetMarketsInteractorImpl(
     override suspend fun get(): List<Market> {
         return withContext(Dispatchers.IO) {
             api.getMarkets()
-                .map { item ->
-                    buildMarket(item.account)
+                .map(MarketResponseItem::account)
+                .filter { market -> market.metadataUri.isValidMetadataUri() }
+                .mapNotNull { market ->
+                    runCatching { buildMarket(market) }
+                        .getOrNull()
                 }
         }
     }
@@ -48,4 +48,10 @@ internal class GetMarketsInteractorImpl(
             participants = emptyList(),
         )
     }
+}
+
+private fun String.isValidMetadataUri(): Boolean {
+    return this.startsWith("https://")
+            || this.startsWith("http://")
+            || this.startsWith("ipfs://")
 }
