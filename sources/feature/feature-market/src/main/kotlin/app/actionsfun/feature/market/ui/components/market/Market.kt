@@ -1,5 +1,8 @@
+@file:OptIn(ExperimentalFoundationApi::class)
+
 package app.actionsfun.feature.market.ui.components.market
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -8,7 +11,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -27,34 +29,37 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import app.actionsfun.common.ui.components.button.ThreeDimensionalButton
+import app.actionsfun.common.ui.avatar.avatarByWalletAddress
+import app.actionsfun.common.ui.components.button.PrimaryButton
 import app.actionsfun.common.ui.components.threed.Gyroscopic3DLayout
+import app.actionsfun.common.ui.modifier.bouncingClickable
 import app.actionsfun.common.ui.style.AppTheme
 import app.actionsfun.common.ui.style.Body12Regular
 import app.actionsfun.common.ui.style.Body14Regular
 import app.actionsfun.common.ui.style.Body16Medium
-import app.actionsfun.common.ui.style.Heading3
+import app.actionsfun.common.ui.style.Heading4
 import app.actionsfun.common.util.Timer
 import app.actionsfun.common.util.timeLeftString
 import app.actionsfun.common.util.timeRelativeString
-import app.actionsfun.feature.market.ui.components.AnimatedNumber
 import app.actionsfun.feature.market.ui.components.Section
 import app.actionsfun.feature.market.ui.components.SectionedArcProgress
 import app.actionsfun.repository.actions.internal.api.model.MarketUiState
 import app.actionsfun.repository.actions.internal.api.model.UIMarketState
 import app.actionsfun.repository.actions.internal.api.model.isActive
 import app.actionsfun.repository.actions.internal.api.model.isCancelled
+import app.actionsfun.repository.actions.internal.api.model.isDeciding
 import app.actionsfun.repository.actions.internal.api.model.isFinished
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.time.OffsetDateTime
 import java.util.UUID
-import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.seconds
 
 @Stable
@@ -67,18 +72,33 @@ internal data class MarketUI(
     val creatorAvatar: String,
     val createdAt: OffsetDateTime,
     val endsAt: OffsetDateTime,
-    val volume: Double,
-    val volumeYes: Double,
-    val volumeNo: Double,
+    val volume: Float,
+    val volumeYes: Float,
+    val volumeNo: Float,
     val replies: List<CommentUI>,
     val marketUIState: MarketUiState,
     val accentColor: Color,
     val button: String,
-)
+) {
+    val chance: Int
+        get() = when {
+            volume == 0f -> 50
+            else -> ((volumeYes / volume) * 100).toInt()
+        }
+
+    val chanceYes: Float
+        get() = if (volumeYes == 0f && volumeNo == 0f) 50f else volumeYes
+
+    val chanceNo: Float
+        get() = if (volumeYes == 0f && volumeNo == 0f) 50f else volumeNo
+
+    val creatorTwitter: String
+        get() = "https://x.com/$creatorUsername"
+}
 
 @Stable
 internal data class CommentUI(
-    val image: String,
+    val image: Int,
     val author: String,
     val text: String,
     val createdAt: OffsetDateTime,
@@ -88,6 +108,9 @@ internal data class CommentUI(
 internal fun Market(
     state: MarketUI,
     modifier: Modifier = Modifier,
+    buttonClick: () -> Unit = { Unit },
+    profileClick: (String) -> Unit = { Unit },
+    viewAllRepliesClick: () -> Unit = { Unit },
 ) {
     Column(
         modifier = modifier
@@ -116,24 +139,27 @@ internal fun Market(
                 verticalArrangement = Arrangement.spacedBy(24.dp),
                 horizontalAlignment = Alignment.Start,
             ) {
-                Header(state)
+                Header(
+                    state = state,
+                    profileClick = profileClick,
+                )
 
                 MarketDescription(state)
 
                 AboutMarket(state)
 
-                Replies(state)
+                Replies(
+                    state = state,
+                    viewAllClick = viewAllRepliesClick,
+                )
             }
         }
 
-        ThreeDimensionalButton(
+        PrimaryButton(
             text = state.button,
             modifier = Modifier
-                .fillMaxWidth()
-                .height(52.dp),
-            color = state.accentColor,
-            shadowColor = state.accentColor.copy(alpha = .4f),
-            onClick = {},
+                .fillMaxWidth(),
+            onClick = buttonClick,
         )
     }
 }
@@ -142,6 +168,7 @@ internal fun Market(
 private fun Header(
     state: MarketUI,
     modifier: Modifier = Modifier,
+    profileClick: (String) -> Unit = { Unit },
 ) {
     var endsAt by remember {
         mutableStateOf(state.endsAt.timeLeftString())
@@ -155,12 +182,17 @@ private fun Header(
 
     Row(
         modifier = modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .bouncingClickable { profileClick(state.creatorTwitter) },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         AsyncImage(
-            model = state.creatorAvatar,
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(state.creatorAvatar)
+                .crossfade(true)
+                .build(),
+            placeholder = painterResource(app.actionsfun.common.ui.R.drawable.ic_photo_placeholder),
             modifier = Modifier
                 .size(48.dp)
                 .clip(RoundedCornerShape(12.dp)),
@@ -230,6 +262,15 @@ private fun MarketStatus(
                 )
             }
 
+            state.marketUIState.isDeciding -> {
+                Text(
+                    text = "Deciding",
+                    style = Body16Medium,
+                    color = AppTheme.Colors.Text.Primary,
+                    modifier = Modifier,
+                )
+            }
+
             state.marketUIState.isCancelled -> {
                 Text(
                     text = "Cancelled",
@@ -255,7 +296,7 @@ private fun MarketDescription(
     ) {
         Text(
             text = state.title,
-            style = Heading3,
+            style = Heading4,
             color = AppTheme.Colors.Text.Primary,
         )
         Text(
@@ -279,7 +320,7 @@ private fun AboutMarket(
     ) {
         Text(
             text = "About market",
-            style = Heading3,
+            style = Body16Medium,
             color = AppTheme.Colors.Text.Primary,
         )
 
@@ -290,7 +331,11 @@ private fun AboutMarket(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             AsyncImage(
-                model = state.image,
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(state.image)
+                    .crossfade(true)
+                    .build(),
+                placeholder = painterResource(app.actionsfun.common.ui.R.drawable.ic_photo_placeholder),
                 modifier = Modifier
                     .size(48.dp)
                     .clip(RoundedCornerShape(12.dp)),
@@ -314,14 +359,14 @@ private fun AboutMarket(
                         color = AppTheme.Colors.Text.Secondary,
                     )
                     Row {
-                        AnimatedNumber(
-                            number = ((state.volumeYes / state.volume) * 100).roundToInt(),
-                            style = Heading3,
+                        Text(
+                            text = state.chance.toString(),
+                            style = Heading4,
                             color = AppTheme.Colors.Text.Primary
                         )
                         Text(
                             text = "%",
-                            style = Heading3,
+                            style = Heading4,
                             color = AppTheme.Colors.Text.Primary,
                         )
                     }
@@ -334,11 +379,11 @@ private fun AboutMarket(
                     sections = listOf(
                         Section(
                             color = Color(0xFF21D979),
-                            value = state.volumeYes.toFloat()
+                            value = state.chanceYes
                         ),
                         Section(
                             color = Color(0xFFE9E9ED),
-                            value = state.volumeNo.toFloat(),
+                            value = state.chanceNo,
                         ),
                     )
                 )
@@ -365,9 +410,9 @@ private fun AboutMarket(
                         painter = painterResource(app.actionsfun.common.ui.R.drawable.ic_solana),
                         contentDescription = null,
                     )
-                    AnimatedNumber(
-                        number = state.volume,
-                        style = Heading3,
+                    Text(
+                        text = "%.2f".format(state.volume),
+                        style = Heading4,
                         color = AppTheme.Colors.Text.Primary
                     )
                 }
@@ -380,6 +425,7 @@ private fun AboutMarket(
 private fun Replies(
     state: MarketUI,
     modifier: Modifier = Modifier,
+    viewAllClick: () -> Unit = { Unit },
 ) {
     Column(
         modifier = modifier
@@ -399,6 +445,8 @@ private fun Replies(
                 color = AppTheme.Colors.Text.Primary,
             )
             Text(
+                modifier = Modifier
+                    .bouncingClickable { viewAllClick() },
                 text = "View All (${state.replies.size})",
                 style = Body14Regular,
                 color = AppTheme.Colors.Text.Primary,
@@ -419,7 +467,7 @@ private fun Replies(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     AsyncImage(
-                        model = reply.image,
+                        model = reply.author.avatarByWalletAddress,
                         modifier = Modifier
                             .size(24.dp)
                             .clip(CircleShape),
@@ -451,9 +499,9 @@ private fun Preview() {
             address = UUID.randomUUID().toString(),
             createdAt = OffsetDateTime.now().minusMinutes(24),
             endsAt = OffsetDateTime.now().plusHours(2).plusMinutes(21),
-            volumeYes = 5.6,
-            volumeNo = 4.4,
-            volume = 10.0,
+            volumeYes = 5.6f,
+            volumeNo = 4.4f,
+            volume = 10.0f,
             image = "",
             title = "Will pump.fun have higher trading volume than bonk.fun in exactly 24 hours?",
             description = "This market will resolve to YES if, exactly 24 hours after creation, pump.fun shows higher total trading volume than bonk.fun. Verification will be based on publicly available sources such as Axiom dashboards or on-chain data explorers.",

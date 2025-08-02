@@ -51,37 +51,43 @@ internal fun SectionedArcProgress(
             width = size.width - padding * 2,
             height = size.height * 2 - padding * 2
         )
+        val visibleSections = sections.filter { it.value > 0 }
 
-        val totalValue = sections.sumOf { it.value.toDouble() }.toFloat()
+        val totalValue = visibleSections.sumOf { it.value.toDouble() }.toFloat()
         if (totalValue == 0f) return@Canvas
 
         var currentAngle = 180f
 
         val gapAngle = strokeWidthPx * 1.5f
         val totalGapAngle = gapAngle * (sections.size - 1)
-        val availableAngle = 180f - totalGapAngle
-
-        sections.forEachIndexed { index, section ->
-            val sweepAngle = (section.value / totalValue) * availableAngle * animatedProgress.value
-
-            drawArc(
-                color = section.color,
-                startAngle = currentAngle,
-                sweepAngle = sweepAngle,
-                useCenter = false,
-                topLeft = Offset(padding, padding),
-                size = arcSize,
-                style = Stroke(
-                    width = strokeWidthPx,
-                    cap = StrokeCap.Round
-                )
-            )
-
-            currentAngle += sweepAngle
-            if (index < sections.size - 1) {
-                currentAngle += gapAngle
-            }
+        val availableAngle = when {
+            visibleSections.size > 1 -> 180f - totalGapAngle
+            else -> 180f
         }
+
+        visibleSections
+            .forEachIndexed { index, section ->
+                val sweepAngle =
+                    (section.value / totalValue) * availableAngle * animatedProgress.value
+
+                drawArc(
+                    color = section.color,
+                    startAngle = currentAngle,
+                    sweepAngle = sweepAngle,
+                    useCenter = false,
+                    topLeft = Offset(padding, padding),
+                    size = arcSize,
+                    style = Stroke(
+                        width = strokeWidthPx,
+                        cap = StrokeCap.Round
+                    )
+                )
+
+                currentAngle += sweepAngle
+                if (index < sections.size - 1) {
+                    currentAngle += gapAngle
+                }
+            }
     }
 }
 

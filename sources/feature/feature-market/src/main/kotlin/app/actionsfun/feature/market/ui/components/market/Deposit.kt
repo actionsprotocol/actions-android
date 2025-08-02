@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,69 +26,106 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import app.actionsfun.common.ui.components.button.BaseThreeDimensionalButton
+import app.actionsfun.common.ui.components.button.PrimaryButton
+import app.actionsfun.common.ui.components.button.ThreeDimensionalButton
+import app.actionsfun.common.ui.modifier.hapticFeedback
 import app.actionsfun.common.ui.style.AppTheme
 import app.actionsfun.common.ui.style.Body14Medium
 import app.actionsfun.common.ui.style.Body14Regular
 import app.actionsfun.common.ui.style.Body16Medium
 import app.actionsfun.common.ui.style.Heading1
+import app.actionsfun.feature.market.ui.DepositUI
 import app.actionsfun.feature.market.ui.QuickAmountUI
+import timber.log.Timber
 
 @Composable
 internal fun Deposit(
+    state: DepositUI,
     modifier: Modifier = Modifier,
+    quickAmountClick: (Float) -> Unit = { Unit },
+    optionClick: (Boolean) -> Unit = { Unit },
+    valueChange: (Float) -> Unit = { Unit },
+    actionButtonClick: () -> Unit = { Unit },
 ) {
-    Column(
+    Box(
         modifier = modifier
-            .background(
-                color = Color(0xFFFFFFFF),
-                shape = RoundedCornerShape(32.dp),
-            )
-            .fillMaxWidth()
-            .border(
-                width = 1.dp,
-                color = Color(0xFFE9E9ED),
-                shape = RoundedCornerShape(32.dp),
-            )
-            .padding(all = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(24.dp),
+            .fillMaxSize()
+            .imePadding()
+            .padding(bottom = 16.dp),
+        contentAlignment = Alignment.TopCenter,
     ) {
-        Text(
-            text = "Will pump.fun have higher trading volume than bonk.fun in exactly 24 hours?",
-            style = Body16Medium,
-            color = AppTheme.Colors.Text.Primary,
-        )
-
-        OptionPicker()
-
-        AmountInput(
-            title = "Enter amount",
-            amount = 0f,
-            label = "Balance: 23.52 SOL",
-            error = null,
-        )
-
-        QuickAmounts(
-            options = listOf(
-                QuickAmountUI(0.1f, "+0.1"),
-                QuickAmountUI(0.5f, "+0.5"),
-                QuickAmountUI(1f, "+1"),
-                QuickAmountUI(24f, "Max"),
+        Column(
+            modifier = Modifier
+                .background(
+                    color = Color(0xFFFFFFFF),
+                    shape = RoundedCornerShape(32.dp),
+                )
+                .fillMaxWidth()
+                .border(
+                    width = 1.dp,
+                    color = Color(0xFFE9E9ED),
+                    shape = RoundedCornerShape(32.dp),
+                )
+                .alpha(
+                    if (state.enabled) 1f else .4f
+                )
+                .padding(all = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp),
+        ) {
+            Text(
+                text = state.title,
+                style = Body16Medium,
+                color = AppTheme.Colors.Text.Primary,
             )
+
+            OptionPicker(
+                state = state,
+                optionSelected = optionClick,
+            )
+
+            AmountInput(
+                title = state.label,
+                amount = state.amount,
+                infoMessage = state.infoMessage,
+                label = "Balance: ${state.balance} SOL",
+                enabled = state.enabled && !state.loading,
+                onAmountChange = valueChange,
+            )
+
+            QuickAmounts(
+                options = state.quickAmounts,
+                enabled = state.enabled && !state.loading,
+                onClick = quickAmountClick,
+            )
+        }
+
+        PrimaryButton(
+            text = state.button,
+            loading = state.loading,
+            enabled = state.buttonEnabled,
+            onClick = actionButtonClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter),
         )
     }
 }
 
 @Composable
 private fun OptionPicker(
+    state: DepositUI,
     modifier: Modifier = Modifier,
+    optionSelected: (Boolean) -> Unit = { Unit },
 ) {
     Row(
         modifier = modifier
@@ -97,21 +135,31 @@ private fun OptionPicker(
     ) {
         OptionButton(
             modifier = Modifier
-                .weight(1f),
+                .weight(1f)
+                .hapticFeedback(HapticFeedbackType.ContextClick),
             text = "YES",
-            label = "12%",
-            isActive = true,
+            label = state.yesPercentage,
+            isActive = state.selectedOption,
             option = true,
-            onClick = {},
+            onClick = {
+                if (!state.loading && state.enabled) {
+                    optionSelected(true)
+                }
+            },
         )
         OptionButton(
             modifier = Modifier
-                .weight(1f),
+                .weight(1f)
+                .hapticFeedback(HapticFeedbackType.ContextClick),
             text = "NO",
-            label = "88%",
-            isActive = false,
+            label = state.noPercentage,
+            isActive = !state.selectedOption,
             option = false,
-            onClick = {},
+            onClick = {
+                if (!state.loading && state.enabled) {
+                    optionSelected(false)
+                }
+            },
         )
     }
 }
@@ -175,7 +223,8 @@ private fun AmountInput(
     title: String,
     amount: Float,
     label: String,
-    error: String?,
+    infoMessage: String,
+    enabled: Boolean,
     modifier: Modifier = Modifier,
     onAmountChange: (Float) -> Unit = { },
 ) {
@@ -224,7 +273,10 @@ private fun AmountInput(
                 modifier = Modifier,
                 value = text,
                 onValueChange = { newText ->
-                    onAmountChange(newText.toFloatOrNull() ?: 0f)
+                    onAmountChange(
+                        newText.replace("..", ".")
+                            .toFloatOrNull() ?: 0f
+                    )
                 },
                 textStyle = Heading1.copy(
                     color = if (isHint) Color(0xFFDBDEE0) else Color(0xFF000000)
@@ -234,6 +286,7 @@ private fun AmountInput(
                     imeAction = ImeAction.Done
                 ),
                 singleLine = true,
+                enabled = enabled,
                 decorationBox = { innerTextField ->
                     if (isHint) {
                         Text(
@@ -252,12 +305,21 @@ private fun AmountInput(
             style = Body14Regular,
             color = AppTheme.Colors.Text.Secondary,
         )
+
+        if (infoMessage.isNotEmpty()) {
+            Text(
+                text = infoMessage,
+                style = Body14Regular,
+                color = AppTheme.Colors.Text.Secondary,
+            )
+        }
     }
 }
 
 @Composable
 private fun QuickAmounts(
     options: List<QuickAmountUI>,
+    enabled: Boolean,
     modifier: Modifier = Modifier,
     onClick: (Float) -> Unit = { Unit },
 ) {
@@ -278,7 +340,8 @@ private fun QuickAmounts(
                     )
                     .height(36.dp)
                     .clip(RoundedCornerShape(24.dp))
-                    .clickable { onClick(amount.value) },
+                    .hapticFeedback(HapticFeedbackType.ContextClick)
+                    .clickable(enabled = enabled) { onClick(amount.value) },
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
@@ -299,6 +362,26 @@ private fun Preview() {
             .fillMaxSize()
     ) {
         Deposit(
+            state = DepositUI(
+                selectedOption = true,
+                amount = 0f,
+                title = "Will pump.fun have higher trading volume than bonk.fun in exactly 24 hours?",
+                label = "Enter amount",
+                balance = 11.23f,
+                quickAmounts = listOf(
+                    QuickAmountUI(value = 0.1f, label = "0.1"),
+                    QuickAmountUI(value = 0.5f, label = "0.5"),
+                    QuickAmountUI(value = 1f, label = "1"),
+                    QuickAmountUI(value = 23f, label = "Max"),
+                ),
+                yesPercentage = "12%",
+                noPercentage = "88%",
+                button = "Deposit",
+                enabled = true,
+                loading = false,
+                buttonEnabled = true,
+                infoMessage = ""
+            ),
             modifier = Modifier
                 .padding(all = 16.dp)
         )

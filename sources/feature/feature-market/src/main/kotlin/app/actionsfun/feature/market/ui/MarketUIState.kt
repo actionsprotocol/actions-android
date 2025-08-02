@@ -6,7 +6,7 @@ import app.actionsfun.feature.market.ui.components.market.MarketUI
 
 internal data class MarketUIState(
     val video: VideoUI?,
-    val market: MarketUI,
+    val market: MarketUI?,
     val deposit: DepositUI,
     val replies: RepliesUI,
     val selectedCard: Int,
@@ -38,21 +38,45 @@ internal data class DepositUI(
     val selectedOption: Boolean,
     val amount: Float,
     val title: String,
+    val label: String,
     val balance: Float,
-    val error: String?,
-    val success: String?,
     val quickAmounts: List<QuickAmountUI>,
     val yesPercentage: String,
     val noPercentage: String,
     val button: String,
-)
+    val buttonEnabled: Boolean,
+    val enabled: Boolean,
+    val loading: Boolean,
+    val infoMessage: String,
+) {
+
+    companion object {
+        val Empty = DepositUI(
+            selectedOption = false,
+            amount = 0f,
+            title = "",
+            label = "",
+            balance = 0f,
+            quickAmounts = emptyList(),
+            yesPercentage = "",
+            noPercentage = "",
+            button = "",
+            enabled = false,
+            loading = false,
+            buttonEnabled = false,
+            infoMessage = "",
+        )
+    }
+}
 
 internal data class RepliesUI(
     val replies: List<CommentUI>,
     val button: String,
+    val isWalletConnected: Boolean = false,
 )
 
 internal data class QuickAmountUI(
     val value: Float,
     val label: String,
+    val enabled: Boolean = true,
 )
