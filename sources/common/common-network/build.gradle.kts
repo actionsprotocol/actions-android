@@ -7,8 +7,6 @@ android.namespace = "app.actionsfun.common.network"
 
 dependencies {
     api(libs.bundles.retrofit)
-    api(libs.retrofitXmlAdapter)
-    api(libs.simpleXml)
     api(libs.kotlinCoroutinesCore)
     api(libs.kotlinSerialization)
     api(libs.okhttp)

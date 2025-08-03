@@ -1,7 +1,9 @@
 package app.actionsfun.repository.solana
 
+import androidx.annotation.Keep
 import kotlinx.serialization.Serializable
 
+@Keep
 @Serializable
 data class ConnectedWallet(
     val userId: String,
@@ -14,6 +16,7 @@ data class ConnectedWallet(
     val isNone: Boolean
         get() = this == Empty
 
+    @Keep
     @Serializable
     data class Account(
         val publicKey: String,

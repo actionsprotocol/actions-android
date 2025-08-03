@@ -416,6 +416,15 @@
 
 -keep class java.lang.invoke.** { *; }
 
+-dontwarn com.ditchoom.buffer.**
+-keep class com.ditchoom.buffer.** { *; }
+-keepclassmembers class com.ditchoom.buffer.** { *; }
+
+-keep class * {
+    @com.ditchoom.buffer.* <fields>;
+    @com.ditchoom.buffer.* <methods>;
+}
+
 -dontwarn com.sun.jna.FunctionMapper
 -dontwarn com.sun.jna.JNIEnv
 -dontwarn com.sun.jna.Library
