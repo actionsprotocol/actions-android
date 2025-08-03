@@ -9,11 +9,16 @@ import androidx.compose.ui.Modifier
 import app.actionsfun.common.navigation.AppDestination
 import app.actionsfun.common.navigation.core.AppNavigation
 import app.actionsfun.common.navigation.core.Destination
+import app.actionsfun.common.navigation.core.NavAnimation
 import app.actionsfun.common.navigation.core.destination
 import app.actionsfun.common.ui.style.AppTheme
+import app.actionsfun.feature.home.ui.HomeScreen
 import app.actionsfun.feature.onboarding.ui.OnboardingScreen
+import app.actionsfun.feature.profile.ui.ProfileScreen
 import app.actionsfun.feature.splash.ui.SplashScreen
 import org.koin.compose.koinInject
+import app.actionsfun.common.ui.components.toast.ErrorNotificationToast
+import app.actionsfun.common.ui.components.toast.SuccessNotificationToast
 
 @Composable
 internal fun AppContainer(
@@ -22,8 +27,8 @@ internal fun AppContainer(
 ) {
     Box(
         modifier = Modifier
-            .fillMaxSize()
             .background(AppTheme.Colors.Background.Primary)
+            .fillMaxSize()
     ) {
         AppNavigation(
             activity = activity,
@@ -41,11 +46,34 @@ internal fun AppContainer(
                         storeProvider = koinInject(),
                     )
                 }
+                destination<AppDestination.Home> {
+                    HomeScreen(
+                        navigator = navigator,
+                        storeProvider = koinInject(),
+                    )
+                }
+                destination<AppDestination.Profile>(
+                    animate = NavAnimation.SlideUp
+                ) {
+                    ProfileScreen(
+                        navigator = navigator,
+                        storeProvider = koinInject(),
+                    )
+                }
             },
             sheets = { sheet, navigator -> },
             dialogs = { dialog, navigator -> },
             overlayScreens = { overlay, navigator -> },
-            toasts = { toast, navigator -> }
+            toasts = { toast, navigator ->
+                when (toast) {
+                    is AppDestination.ErrorToast -> {
+                        ErrorNotificationToast(toast.text)
+                    }
+                    is AppDestination.SuccessToast -> {
+                        SuccessNotificationToast(toast.text)
+                    }
+                }
+            }
         )
     }
 }

@@ -3,10 +3,14 @@ package app.actions
 import android.app.Application
 import app.actionsfun.common.network.di.CommonNetworkModule
 import app.actions.di.AppModule
+import app.actionsfun.feature.home.di.HomeModule
+import app.actionsfun.feature.market.di.MarketModule
 import app.actionsfun.feature.onboarding.di.OnboardingModule
+import app.actionsfun.feature.profile.di.ProfileModule
 import app.actionsfun.feature.splash.di.SplashModule
 import app.actionsfun.repository.actions.di.ActionsRepositoryModule
 import app.actionsfun.repository.onboarding.di.OnboardingRepositoryModule
+import app.actionsfun.repository.pinata.di.PinataModule
 import app.actionsfun.repository.preferences.di.AppPreferencesModule
 import app.actionsfun.repository.solana.di.SolanaModule
 import app.actionsfun.repository.user.di.UserRepositoryModule
@@ -37,11 +41,15 @@ class Application : Application() {
                 AppPreferencesModule,
                 CommonNetworkModule,
                 SolanaModule,
+                PinataModule,
                 UserRepositoryModule,
                 OnboardingRepositoryModule,
+                ActionsRepositoryModule,
                 SplashModule,
                 OnboardingModule,
-                ActionsRepositoryModule,
+                HomeModule,
+                MarketModule,
+                ProfileModule,
             )
         }
     }
