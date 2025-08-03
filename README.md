@@ -3,17 +3,14 @@
 [![Issues](https://img.shields.io/github/issues/actionsprotocol/actions-android)](https://github.com/actionsprotocol/actions-android/issues)
 
 # actions.FUN
-
 Official Android app for the [actions.fun](https://app.actions.fun)
 
 # Overview
-
 This repository contains the open source actions.fun Android client.
 
 # Compilation Guide
 
 ## Requirements
-
 You will need:
 - Android Studio (latest stable version recommended)
 - Android SDK API 34 or higher
@@ -22,7 +19,6 @@ You will need:
 - Git
 
 ## Setup Instructions
-
 - Clone the repository
 - `bash git clone https://github.com/your-username/actions-fun-app.git`
 - `cd actions-fun-app`
@@ -34,10 +30,9 @@ You will need:
 ## Building Release APK
 
 ### Configure Signing
-
-- Navigate to app.actionsfun.environment.Signing
+- Navigate to `app.actionsfun.environment.Signing`
 - Modify the release configuration with your own values:
-- kotlinstorePassword = "your_store_password"
+- keyStorePassword = "your_store_password"
 - keyAlias = "your_key_alias"
 - keyPassword = "your_key_password"
 
