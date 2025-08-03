@@ -76,7 +76,7 @@ internal fun Deposit(
         Column(
             modifier = Modifier
                 .background(
-                    color = Color(0xFFFFFFFF),
+                    color = AppTheme.Colors.Background.Surface,
                     shape = RoundedCornerShape(32.dp),
                 )
                 .fillMaxWidth()

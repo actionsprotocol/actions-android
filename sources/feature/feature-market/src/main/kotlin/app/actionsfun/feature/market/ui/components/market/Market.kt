@@ -122,7 +122,7 @@ internal fun Market(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
-            color = Color.White,
+            color = AppTheme.Colors.Background.Surface,
             shape = RoundedCornerShape(32.dp),
             shadowColor = Color(0xFFEC58A9),
             shadowAlignment = Alignment.BottomStart,

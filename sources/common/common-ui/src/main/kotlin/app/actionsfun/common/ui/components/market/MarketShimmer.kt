@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import app.actionsfun.common.ui.components.threed.Gyroscopic3DLayout
 import app.actionsfun.common.ui.rememberAppShimmer
+import app.actionsfun.common.ui.style.AppTheme
 import com.valentinilk.shimmer.shimmer
 
 @Composable
@@ -30,7 +31,7 @@ fun MarketShimmer(
 ) {
     Gyroscopic3DLayout(
         modifier = modifier,
-        color = Color.White,
+        color = AppTheme.Colors.Background.Surface,
         shape = RoundedCornerShape(32.dp),
         shadowColor = Color(0xFFE9E9ED),
         shadowAlignment = Alignment.BottomStart,

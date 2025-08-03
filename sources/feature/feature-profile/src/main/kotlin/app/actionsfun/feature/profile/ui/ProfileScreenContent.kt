@@ -224,6 +224,7 @@ private fun Header(
                         Icon(
                             modifier = Modifier
                                 .rotate(-90f),
+                            tint = AppTheme.Colors.Text.Primary,
                             painter = painterResource(app.actionsfun.common.ui.R.drawable.ic_chevron_left),
                             contentDescription = null,
                         )

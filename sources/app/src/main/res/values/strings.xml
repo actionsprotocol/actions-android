@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">actions.FUN</string>
+    <string name="provider_authority">app.actions.fileprovider</string>
+</resources>

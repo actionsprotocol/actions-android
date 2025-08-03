@@ -33,7 +33,7 @@ internal fun WalletOptionsBottomSheet(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
-        containerColor = AppTheme.Colors.Background.Primary,
+        containerColor = AppTheme.Colors.Background.Surface,
         shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
     ) {
         Column(

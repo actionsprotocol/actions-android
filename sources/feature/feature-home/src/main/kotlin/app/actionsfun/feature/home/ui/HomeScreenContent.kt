@@ -102,6 +102,7 @@ private fun Toolbar(
     ) {
         Icon(
             modifier = Modifier.size(40.dp),
+            tint = AppTheme.Colors.Text.Primary,
             painter = painterResource(app.actionsfun.common.ui.R.drawable.app_logo),
             contentDescription = null,
         )
@@ -172,6 +173,7 @@ private fun Wallet(
             Text(
                 modifier = Modifier.weight(1f),
                 text = publicKey,
+                color = AppTheme.Colors.Text.Primary,
                 style = Body14SemiBold,
                 overflow = TextOverflow.MiddleEllipsis,
                 maxLines = 1,

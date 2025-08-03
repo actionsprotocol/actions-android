@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -33,6 +32,7 @@
             android:name="app.actions.MainActivity"
             android:exported="true"
             android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustNothing"
             android:theme="@style/Theme.Actions">
 
             <intent-filter>
@@ -51,21 +51,6 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
-
-<!--        <receiver-->
-<!--            android:name="app.actions.service.BootReceiver"-->
-<!--            android:enabled="true"-->
-<!--            android:exported="true">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.BOOT_COMPLETED" />-->
-<!--            </intent-filter>-->
-<!--        </receiver>-->
-
-<!--        <service-->
-<!--            android:name="app.actions.service.DvpnNodeService"-->
-<!--            android:foregroundServiceType="dataSync"-->
-<!--            android:exported="false" />-->
-
     </application>
 
 </manifest>

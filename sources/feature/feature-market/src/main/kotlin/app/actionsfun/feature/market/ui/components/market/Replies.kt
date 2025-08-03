@@ -53,7 +53,7 @@ internal fun RepliesCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .background(Color.White, RoundedCornerShape(32.dp))
+                .background(AppTheme.Colors.Background.Surface, RoundedCornerShape(32.dp))
                 .border(2.dp, Color(0xFFEC58A9), RoundedCornerShape(32.dp))
                 .padding(24.dp)
         ) {
