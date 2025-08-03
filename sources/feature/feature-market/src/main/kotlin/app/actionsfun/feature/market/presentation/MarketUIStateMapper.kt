@@ -37,7 +37,7 @@ internal class MarketUIStateMapper : UiStateMapper<State, UIState> {
                         UIMarketState.AutoCanceled,
                         UIMarketState.CanceledByCreator -> MarketStatusUI.Cancelled
                     },
-                    videoUrl = market.market.video,
+                    videoUrl = "https://video.twimg.com/amplify_video/1951472788533026821/vid/avc1/320x568/MAsTmYAYEOnd2nLD.mp4?tag=21",
                     button = "Trade",
                 )
             }?.takeIf { video -> !video.videoUrl.isNullOrEmpty() },

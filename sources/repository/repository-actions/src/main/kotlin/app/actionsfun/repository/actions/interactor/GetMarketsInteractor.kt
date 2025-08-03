@@ -22,7 +22,10 @@ internal class GetMarketsInteractorImpl(
         return withContext(Dispatchers.IO) {
             api.getMarkets()
                 .map(MarketResponseItem::account)
-                .filter { market -> market.metadataUri.isValidMetadataUri() }
+                .filter { market ->
+                    market.metadataUri.isValidMetadataUri()
+                            && !market.creatorTwitterUsername.isNullOrEmpty()
+                }
                 .mapNotNull { market ->
                     runCatching { buildMarket(market) }
                         .getOrNull()

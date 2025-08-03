@@ -21,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import app.actionsfun.common.ui.components.threed.Gyroscopic3DLayout
+import app.actionsfun.common.ui.components.threed.ThreeDimensionalLayout
 import app.actionsfun.common.ui.rememberAppShimmer
 import app.actionsfun.common.ui.style.AppTheme
 import com.valentinilk.shimmer.shimmer
@@ -29,7 +30,7 @@ import com.valentinilk.shimmer.shimmer
 fun MarketShimmer(
     modifier: Modifier = Modifier,
 ) {
-    Gyroscopic3DLayout(
+    ThreeDimensionalLayout(
         modifier = modifier,
         color = AppTheme.Colors.Background.Surface,
         shape = RoundedCornerShape(32.dp),

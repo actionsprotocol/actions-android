@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import app.actionsfun.common.ui.components.button.ThreeDimensionalButton
 import app.actionsfun.common.ui.components.threed.Gyroscopic3DLayout
+import app.actionsfun.common.ui.components.threed.ThreeDimensionalLayout
 import app.actionsfun.common.ui.style.AppTheme
 import app.actionsfun.common.ui.style.Body14Medium
 import app.actionsfun.common.ui.style.Body14Regular
@@ -53,7 +54,7 @@ internal fun Market(
     modifier: Modifier = Modifier,
     claimClick: (String) -> Unit = { Unit },
 ) {
-    Gyroscopic3DLayout(
+    ThreeDimensionalLayout(
         modifier = modifier
             .fillMaxWidth(),
         color = Color(0xFFFFFFFF),

@@ -2,6 +2,7 @@ package app.actionsfun.common.ui.components.threed
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,10 +21,9 @@ fun ThreeDimensionalLayout(
     shadowColor: Color,
     modifier: Modifier = Modifier,
     shadowAlignment: Alignment = Alignment.BottomCenter,
-    shadowDepth: Dp = 4.dp,
+    shadowDepth: Dp = 2.dp,
     shape: Shape = RoundedCornerShape(16.dp),
-    contentPadding: Dp = 16.dp,
-    content: @Composable () -> Unit,
+    content: @Composable BoxScope.() -> Unit,
 ) {
     val (shadowOffsetX, shadowOffsetY) = when (shadowAlignment) {
         Alignment.TopStart -> -shadowDepth to -shadowDepth
@@ -38,23 +38,24 @@ fun ThreeDimensionalLayout(
         else -> 0.dp to shadowDepth
     }
 
-    Box(
-        modifier = modifier
-            .padding(shadowDepth)
-    ) {
+    Box(modifier = modifier) {
         Box(
             modifier = Modifier
                 .matchParentSize()
-                .offset(x = shadowOffsetX, y = shadowOffsetY)
+                .offset(
+                    x = shadowOffsetX,
+                    y = shadowOffsetY,
+                )
                 .clip(shape)
                 .background(shadowColor)
         )
 
         Box(
             modifier = Modifier
+                .matchParentSize()
+                .padding(shadowDepth)
                 .clip(shape)
                 .background(color)
-                .padding(contentPadding)
         ) {
             content()
         }

@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import app.actionsfun.common.ui.avatar.avatarByWalletAddress
 import app.actionsfun.common.ui.components.button.PrimaryButton
-import app.actionsfun.common.ui.components.threed.Gyroscopic3DLayout
+import app.actionsfun.common.ui.components.threed.ThreeDimensionalLayout
 import app.actionsfun.common.ui.exoplayer.ExoPlayer
 import app.actionsfun.common.ui.market.MarketStatusUI
 import app.actionsfun.common.ui.style.AppTheme
@@ -58,11 +58,11 @@ internal fun Video(
             .padding(bottom = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Gyroscopic3DLayout(
+        ThreeDimensionalLayout(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
-            color = Color.White,
+            color = AppTheme.Colors.Background.Surface,
             shape = RoundedCornerShape(32.dp),
             shadowColor = Color(0xFFEC58A9),
             shadowAlignment = Alignment.BottomStart,
@@ -82,9 +82,6 @@ internal fun Video(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    // TODO: Make a soft gray gradient shadow to display
-                    // possibly contrast content
-                    // on the video
                     .background(
                         color = Color.Black,
                         shape = RoundedCornerShape(
@@ -118,7 +115,7 @@ internal fun Video(
                         Text(
                             text = state.creatorUsername,
                             style = Body14Medium,
-                            color = AppTheme.Colors.Text.PrimaryInversed
+                            color = Color.White
                         )
                         Text(
                             text = state.createdAt.timeRelativeString(),
@@ -129,14 +126,14 @@ internal fun Video(
 
                     app.actionsfun.common.ui.market.MarketStatus(
                         state = state.marketStatusUI,
-                        textColor = AppTheme.Colors.Text.PrimaryInversed,
+                        textColor = Color.White,
                     )
                 }
 
                 Text(
                     text = state.title,
                     style = Body16Medium,
-                    color = AppTheme.Colors.Text.PrimaryInversed
+                    color = Color.White,
                 )
             }
         }

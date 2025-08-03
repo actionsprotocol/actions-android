@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import app.actionsfun.common.ui.avatar.avatarByWalletAddress
 import app.actionsfun.common.ui.components.button.PrimaryButton
 import app.actionsfun.common.ui.components.threed.Gyroscopic3DLayout
+import app.actionsfun.common.ui.components.threed.ThreeDimensionalLayout
 import app.actionsfun.common.ui.modifier.bouncingClickable
 import app.actionsfun.common.ui.style.AppTheme
 import app.actionsfun.common.ui.style.Body12Regular
@@ -118,7 +119,7 @@ internal fun Market(
             .padding(bottom = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Gyroscopic3DLayout(
+        ThreeDimensionalLayout(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
