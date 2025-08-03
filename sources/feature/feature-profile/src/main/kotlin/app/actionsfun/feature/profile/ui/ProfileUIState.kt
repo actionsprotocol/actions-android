@@ -26,7 +26,7 @@ internal data class ProfileUIState(
                 label = "Essentials",
                 title = "How it works",
                 text = "Welcome to actions.fun! We're so glad you're here. We've created this guid eto help with the basics of actions.fun and get you started on your new Web3 journey.",
-                url = ""
+                url = "https://app.actions.fun/mobile-faq"
             ),
             marketsSectionTitle = "Your Markets",
             marketsState = MarketsState.Loading,
