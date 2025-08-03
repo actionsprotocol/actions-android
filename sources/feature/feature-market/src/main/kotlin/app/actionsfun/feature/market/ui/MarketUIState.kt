@@ -52,6 +52,12 @@ internal data class DepositUI(
     val enabled: Boolean,
     val loading: Boolean,
     val infoMessage: String,
+    val howItWorks: HowItWorks = HowItWorks(
+        label = "Essentials",
+        title = "How it works",
+        text = "Welcome to actions.fun! We're so glad you're here. We've created this guide to help with the basics of actions.fun and get you started on your new Web3 journey.",
+        url = "https://app.actions.fun/mobile-faq"
+    ),
 ) {
 
     companion object {
@@ -83,4 +89,11 @@ internal data class QuickAmountUI(
     val value: Float,
     val label: String,
     val enabled: Boolean = true,
+)
+
+internal data class HowItWorks(
+    val label: String,
+    val title: String,
+    val text: String,
+    val url: String,
 )

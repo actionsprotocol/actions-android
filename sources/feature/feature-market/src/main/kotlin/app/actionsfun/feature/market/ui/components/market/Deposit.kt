@@ -1,9 +1,12 @@
+@file:OptIn(ExperimentalFoundationApi::class)
+
 package app.actionsfun.feature.market.ui.components.market
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -12,12 +15,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
@@ -28,25 +33,30 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import app.actionsfun.common.ui.components.button.BaseThreeDimensionalButton
 import app.actionsfun.common.ui.components.button.PrimaryButton
 import app.actionsfun.common.ui.components.button.ThreeDimensionalButton
+import app.actionsfun.common.ui.modifier.bouncingClickable
 import app.actionsfun.common.ui.modifier.hapticFeedback
 import app.actionsfun.common.ui.style.AppTheme
+import app.actionsfun.common.ui.style.Body12Regular
 import app.actionsfun.common.ui.style.Body14Medium
 import app.actionsfun.common.ui.style.Body14Regular
 import app.actionsfun.common.ui.style.Body16Medium
+import app.actionsfun.common.ui.style.Body18Medium
 import app.actionsfun.common.ui.style.Heading1
 import app.actionsfun.feature.market.ui.DepositUI
+import app.actionsfun.feature.market.ui.HowItWorks
 import app.actionsfun.feature.market.ui.QuickAmountUI
-import timber.log.Timber
 
 @Composable
 internal fun Deposit(
@@ -57,12 +67,11 @@ internal fun Deposit(
     valueChange: (Float) -> Unit = { Unit },
     actionButtonClick: () -> Unit = { Unit },
 ) {
-    Box(
+    Column(
         modifier = modifier
             .fillMaxSize()
             .imePadding()
             .padding(bottom = 16.dp),
-        contentAlignment = Alignment.TopCenter,
     ) {
         Column(
             modifier = Modifier
@@ -109,14 +118,19 @@ internal fun Deposit(
             )
         }
 
+//        Spacer(modifier = Modifier.height(16.dp))
+//
+//        HowItWorks(state = state.howItWorks)
+
+        Spacer(modifier = Modifier.weight(1f))
+
         PrimaryButton(
             text = state.button,
             loading = state.loading,
             enabled = state.buttonEnabled,
             onClick = actionButtonClick,
             modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter),
+                .fillMaxWidth(),
         )
     }
 }
@@ -351,6 +365,80 @@ private fun QuickAmounts(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun HowItWorks(
+    state: HowItWorks,
+    modifier: Modifier = Modifier,
+    onClick: (String) -> Unit = { Unit },
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .bouncingClickable { onClick(state.url) }
+            .background(
+                brush = Brush.linearGradient(
+                    colors = listOf(
+                        Color(0xFF6159FF),
+                        Color(0xFF9782FF),
+                    )
+                ),
+                shape = RoundedCornerShape(24.dp),
+            )
+            .padding(all = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalAlignment = Alignment.Start,
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(44.dp)
+                    .background(
+                        color = Color.White.copy(alpha = .2f),
+                        shape = CircleShape,
+                    ),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    modifier = Modifier.size(24.dp),
+                    painter = painterResource(app.actionsfun.common.ui.R.drawable.app_logo),
+                    tint = Color.White,
+                    contentDescription = null,
+                )
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                horizontalAlignment = Alignment.Start,
+            ) {
+                Text(
+                    text = state.label,
+                    style = Body12Regular,
+                    color = Color.White.copy(alpha = .7f),
+                )
+                Text(
+                    text = state.title,
+                    style = Body18Medium,
+                    color = Color.White.copy(alpha = .7f),
+                )
+            }
+        }
+
+        Text(
+            text = state.text,
+            style = Body14Regular,
+            color = Color.White.copy(alpha = .7f),
+            maxLines = 3,
+            overflow = TextOverflow.Ellipsis,
+        )
     }
 }
 
