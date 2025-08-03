@@ -104,6 +104,9 @@ internal fun MarketScreenContent(
                             playWhenReady = isVerticallyVisible && (pagerState.currentPage == page),
                             buttonClick = {
                                 scrollToPage(state.depositIndex)
+                            },
+                            creatorClick = {
+                                openUrl("https://x.com/$it")
                             }
                         )
                     }

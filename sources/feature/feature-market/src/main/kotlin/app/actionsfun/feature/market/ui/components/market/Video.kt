@@ -1,7 +1,10 @@
+@file:OptIn(ExperimentalFoundationApi::class)
+
 package app.actionsfun.feature.market.ui.components.market
 
 import android.annotation.SuppressLint
 import android.media.MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -36,6 +39,7 @@ import app.actionsfun.common.ui.components.button.PrimaryButton
 import app.actionsfun.common.ui.components.threed.ThreeDimensionalLayout
 import app.actionsfun.common.ui.exoplayer.ExoPlayer
 import app.actionsfun.common.ui.market.MarketStatusUI
+import app.actionsfun.common.ui.modifier.bouncingClickable
 import app.actionsfun.common.ui.style.AppTheme
 import app.actionsfun.common.ui.style.Body12Regular
 import app.actionsfun.common.ui.style.Body14Medium
@@ -51,6 +55,7 @@ internal fun Video(
     modifier: Modifier = Modifier,
     playWhenReady: Boolean = true,
     buttonClick: () -> Unit = { Unit },
+    creatorClick: (String) -> Unit = { Unit },
 ) {
     Column(
         modifier = modifier
@@ -95,7 +100,8 @@ internal fun Video(
             ) {
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .bouncingClickable { creatorClick(state.creatorUsername) },
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
