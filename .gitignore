@@ -10,3 +10,9 @@ build/
 .cxx
 local.properties
 /signing/release.keystore
+/dappstore/*.json
+/dappstore/package.json
+/dappstore/pnpm-lock.yaml
+/dappstore/node-modules
+/dappstore/.asset-manifest.json
+/dappstore/.asset-manifest-devnet.json
