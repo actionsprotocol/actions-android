@@ -8,6 +8,13 @@ Official Android app for the [actions.fun](https://app.actions.fun)
 # Overview
 This repository contains the open source actions.fun Android client.
 
+<div align="center">
+  <img src="dappstore/media/screenshot_1.png" width="200" alt="Screenshot 1">
+  <img src="dappstore/media/screenshot_2.png" width="200" alt="Screenshot 2">
+  <img src="dappstore/media/screenshot_3.png" width="200" alt="Screenshot 3">
+  <img src="dappstore/media/screenshot_4.png" width="200" alt="Screenshot 4">
+</div>
+
 # Compilation Guide
 
 ## Requirements
