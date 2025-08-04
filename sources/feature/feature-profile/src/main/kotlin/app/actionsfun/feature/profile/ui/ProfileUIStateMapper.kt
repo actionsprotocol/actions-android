@@ -25,12 +25,12 @@ internal class ProfileUIStateMapper : UiStateMapper<State, UIState> {
                         title = market.market.title,
                         chance = market.market.yesPercentage,
                         volume = market.market.volume,
-                        voteOption = market.claimStatus.userOption,
+                        voteOption = market.claimStatus?.userOption ?: true,
                         endsAt = market.market.endsAt,
                         status = market.market.uiState,
-                        claimed = market.claimStatus.alreadyClaimed,
-                        claimAmount = market.claimStatus.claimableAmountSol.toFloat(),
-                        canClaim = market.claimStatus.canClaim,
+                        claimed = market.claimStatus?.alreadyClaimed ?: false,
+                        claimAmount = market.claimStatus?.claimableAmountSol?.toFloat() ?: 0f,
+                        canClaim = market.claimStatus?.canClaim ?: false,
                     )
                 }
             )

@@ -21,6 +21,7 @@ internal class HomeReducer : DslReducer<Command, Effect, Event, State>() {
         when (event) {
             is UIEvent.ConnectWalletClick -> commands(Command.ConnectWallet)
             is UIEvent.ProfileClick -> effects(Effect.OpenProfile)
+            is UIEvent.PageChanged -> state { copy(page = event.index) }
             is UIEvent.RetryLoadingClick -> {
                 state { copy(markets = null, error = null) }
                 commands(Command.LoadMarkets)

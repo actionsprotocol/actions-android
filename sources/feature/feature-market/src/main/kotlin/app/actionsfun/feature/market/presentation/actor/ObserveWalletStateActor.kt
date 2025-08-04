@@ -20,8 +20,10 @@ internal class ObserveWalletStateActor(
             .flatMapLatest {
                 walletRepository.wallet
                     .map { wallet ->
+                        val balance = walletRepository.getBalance()
                         WalletStateChanged(
-                            publicKey = wallet.publicKey.takeIf { it.isNotEmpty() }
+                            publicKey = wallet.publicKey.takeIf { it.isNotEmpty() },
+                            balance = balance?.toFloat() ?: 0f,
                         )
                     }
             }

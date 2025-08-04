@@ -1,5 +1,6 @@
 package app.actionsfun.feature.market.presentation
 
+import android.annotation.SuppressLint
 import androidx.compose.ui.graphics.Color
 import app.actionsfun.common.arch.tea.component.UiStateMapper
 import app.actionsfun.common.ui.avatar.avatarByWalletAddress
@@ -38,6 +39,7 @@ internal class MarketUIStateMapper : UiStateMapper<State, UIState> {
                         UIMarketState.CanceledByCreator -> MarketStatusUI.Cancelled
                     },
                     videoUrl = market.market.video,
+                    creatorAvatar = market.market.creatorTwitterImage,
                     button = "Trade",
                 )
             }?.takeIf { video -> !video.videoUrl.isNullOrEmpty() },
@@ -105,7 +107,7 @@ internal class MarketUIStateMapper : UiStateMapper<State, UIState> {
                 }
                 else -> "Enter amount"
             },
-            balance = balanceSol,
+            balance = balanceSol.formatTo2DecimalsComma(),
             quickAmounts = listOf(
                 QuickAmountUI(
                     value = 0.1f,
@@ -139,11 +141,13 @@ internal class MarketUIStateMapper : UiStateMapper<State, UIState> {
             buttonEnabled = walletPublicKey.isNullOrEmpty()
                     || (market.uiState.isActive && deposit.amount > 0f)
                     || claim?.canClaim == true,
-            infoMessage = when {
-                market.uiState.isActive && deposit.amount > balanceSol -> "Insufficient balance"
-                claim != null && claim.userBetSol > 0 -> "Your bet: ${claim.userBetSol} SOL"
-                else -> ""
-            }
+            infoMessage = ""
         )
+    }
+
+    @SuppressLint("DefaultLocale")
+    private fun Float.formatTo2DecimalsComma(): Float {
+        val string = this.toString().split(",", ".")
+        return "${string[0]}.${string[1].take(2)}".toFloatOrNull() ?: this
     }
 }

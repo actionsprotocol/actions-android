@@ -27,6 +27,7 @@ internal class HomeUIStateMapper : UiStateMapper<State, UIState> {
                     markets = state.markets,
                     publicKey = state.publicKey,
                     connectWallet = "Connect wallet",
+                    pageIndex = state.page,
                 )
             }
         }

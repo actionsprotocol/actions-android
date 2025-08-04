@@ -32,4 +32,6 @@ internal sealed interface HomeUIEvent : HomeEvent {
     data object ProfileClick : HomeUIEvent
 
     data object RetryLoadingClick : HomeUIEvent
+
+    data class PageChanged(val index: Int) : HomeUIEvent
 }

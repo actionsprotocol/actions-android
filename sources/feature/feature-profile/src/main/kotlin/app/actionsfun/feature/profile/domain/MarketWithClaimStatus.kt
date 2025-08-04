@@ -5,5 +5,5 @@ import app.actionsfun.repository.actions.interactor.model.Market
 
 internal data class MarketWithClaimStatus(
     val market: Market,
-    val claimStatus: Claim,
+    val claimStatus: Claim?,
 )

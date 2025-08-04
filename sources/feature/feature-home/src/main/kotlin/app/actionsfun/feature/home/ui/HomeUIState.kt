@@ -17,6 +17,7 @@ internal sealed interface HomeUIState {
         val markets: List<Market>,
         val publicKey: String?,
         val connectWallet: String,
+        val pageIndex: Int,
     ) : HomeUIState
 
     companion object {

@@ -4,6 +4,8 @@ import app.actionsfun.repository.actions.interactor.model.Participant
 import app.actionsfun.repository.actions.interactor.model.Reply
 import app.actionsfun.repository.actions.internal.api.model.ChatMessage
 import app.actionsfun.repository.actions.internal.api.model.SerializedParticipant
+import app.actionsfun.repository.solana.internal.core.Convert
+import timber.log.Timber
 import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
@@ -38,7 +40,6 @@ internal fun String.parseTimestamp(): OffsetDateTime {
 }
 
 internal fun String.lamportsToSOL(): Float {
-    return runCatching {
-        toBigDecimal().divide(1_000_000_000.toBigDecimal()).toFloat()
-    }.getOrDefault(0f)
+    return runCatching { Convert.lamportToSol(this).toFloat() }
+        .getOrDefault(0f)
 }

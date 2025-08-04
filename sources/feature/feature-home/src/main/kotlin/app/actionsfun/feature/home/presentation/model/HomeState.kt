@@ -6,6 +6,7 @@ internal data class HomeState(
     val markets: List<Market>?,
     val publicKey: String?,
     val error: Throwable?,
+    val page: Int,
 ) {
 
     companion object {
@@ -14,6 +15,7 @@ internal data class HomeState(
             markets = null,
             publicKey = null,
             error = null,
+            page = 0,
         )
     }
 }

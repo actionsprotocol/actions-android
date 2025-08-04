@@ -59,6 +59,7 @@ internal fun HomeScreenContent(
     connectWalletClick: () -> Unit = { Unit },
     profileClick: () -> Unit = { Unit },
     retryLoadingClick: () -> Unit = { Unit },
+    onPageChanged: (Int) -> Unit = { Unit },
 ) {
     Column(
         modifier = modifier
@@ -81,6 +82,7 @@ internal fun HomeScreenContent(
             state = state,
             navigator = navigator,
             retryClick = retryLoadingClick,
+            onPageChanged = onPageChanged,
         )
     }
 }
@@ -194,6 +196,7 @@ private fun Markets(
     navigator: Navigator,
     modifier: Modifier = Modifier,
     retryClick: () -> Unit = { Unit },
+    onPageChanged: (Int) -> Unit = { Unit },
 ) {
     Crossfade(
         modifier = modifier,
@@ -226,6 +229,7 @@ private fun Markets(
                 SuccessState(
                     state = marketsState,
                     navigator = navigator,
+                    onPageChanged = onPageChanged,
                 )
             }
         }
@@ -273,13 +277,18 @@ private fun SuccessState(
     state: HomeUIState.Success,
     navigator: Navigator,
     modifier: Modifier = Modifier,
+    onPageChanged: (Int) -> Unit = { Unit },
 ) {
     val pagerState = rememberPagerState { state.markets.size }
+
     val keyboard = LocalSoftwareKeyboardController.current
 
     PagerStateObserver(
         pagerState = pagerState,
-    ) { _, _ -> keyboard?.hide() }
+    ) { _, to ->
+        keyboard?.hide()
+        onPageChanged(to)
+    }
 
     VerticalPager(
         modifier = modifier

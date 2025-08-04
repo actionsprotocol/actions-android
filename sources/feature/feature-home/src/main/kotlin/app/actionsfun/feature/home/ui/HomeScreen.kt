@@ -12,6 +12,7 @@ import app.actionsfun.feature.home.presentation.HomeStore
 import app.actionsfun.feature.home.presentation.HomeStoreProvider
 import app.actionsfun.feature.home.presentation.model.HomeEffect
 import app.actionsfun.feature.home.presentation.model.HomeUIEvent.ConnectWalletClick
+import app.actionsfun.feature.home.presentation.model.HomeUIEvent.PageChanged
 import app.actionsfun.feature.home.presentation.model.HomeUIEvent.ProfileClick
 import app.actionsfun.feature.home.presentation.model.HomeUIEvent.RetryLoadingClick
 import kotlinx.coroutines.flow.launchIn
@@ -50,5 +51,6 @@ fun HomeScreen(
         connectWalletClick = { store.accept(ConnectWalletClick) },
         profileClick = { store.accept(ProfileClick) },
         retryLoadingClick = { store.accept(RetryLoadingClick) },
+        onPageChanged = { store.accept(PageChanged(it)) }
     )
 }

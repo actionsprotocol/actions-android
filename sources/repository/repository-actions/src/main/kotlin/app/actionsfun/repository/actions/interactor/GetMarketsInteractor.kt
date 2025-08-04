@@ -57,4 +57,5 @@ private fun String.isValidMetadataUri(): Boolean {
     return this.startsWith("https://")
             || this.startsWith("http://")
             || this.startsWith("ipfs://")
+            || this.startsWith("pool_")
 }

@@ -8,7 +8,7 @@ import kotlinx.coroutines.withContext
 
 interface GetMarketClaimStatusInteractor {
 
-    suspend fun get(marketAddress: String): Claim
+    suspend fun get(marketAddress: String): Claim?
 }
 
 internal class GetMarketClaimStatusInteractorImpl(
@@ -16,7 +16,7 @@ internal class GetMarketClaimStatusInteractorImpl(
     private val walletRepository: WalletRepository,
 ) : GetMarketClaimStatusInteractor {
 
-    override suspend fun get(marketAddress: String): Claim {
+    override suspend fun get(marketAddress: String): Claim? {
         return withContext(Dispatchers.IO) {
             val wallet = walletRepository.getWallet()
 
@@ -27,18 +27,18 @@ internal class GetMarketClaimStatusInteractorImpl(
             val claimData = api.getMarketClaim(
                 marketId = marketAddress,
                 userAddress = wallet.publicKey,
-            ).data
+            ).data ?: return@withContext null
 
             Claim(
-                canClaim = claimData?.canClaim ?: false,
-                alreadyClaimed = claimData?.alreadyClaimed ?: false,
-                claimableAmount = claimData?.claimableAmount ?: "0",
-                claimableAmountSol = claimData?.claimableAmountSol ?: 0f,
-                multiplier = claimData?.multiplier ?: 0f,
-                userBet = claimData?.userBet ?: "0",
-                userBetSol = claimData?.userBetSol ?: 0f,
-                userOption = claimData?.userOption ?: false,
-                winningOption = claimData?.winningOption ?: false,
+                canClaim = claimData.canClaim,
+                alreadyClaimed = claimData.alreadyClaimed,
+                claimableAmount = claimData.claimableAmount,
+                claimableAmountSol = claimData.claimableAmountSol,
+                multiplier = claimData.multiplier,
+                userBet = claimData.userBet,
+                userBetSol = claimData.userBetSol,
+                userOption = claimData.userOption,
+                winningOption = claimData.winningOption,
             )
         }
     }

@@ -200,7 +200,10 @@ internal class MarketReducer(
             
             is Event.WalletStateChanged -> {
                 state {
-                    copy(walletPublicKey = event.publicKey)
+                    copy(
+                        walletPublicKey = event.publicKey,
+                        balanceSol = event.balance,
+                    )
                 }
             }
             

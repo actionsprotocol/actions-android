@@ -45,6 +45,7 @@ internal sealed interface MarketEvent {
     
     data class WalletStateChanged(
         val publicKey: String?,
+        val balance: Float,
     ) : MarketEvent
     
     data object WalletConnected : MarketEvent
