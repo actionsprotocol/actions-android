@@ -1,0 +1,45 @@
+publisher:
+  name: actions.FUN
+  address: ''
+  website: https://actions.fun
+  email: actionsdotfun@gmail.com
+  media:
+    - purpose: icon
+      uri: ./media/logo_dark.png
+app:
+  name: actions.FUN
+  address: ''
+  android_package: app.actionsfun
+  urls:
+    license_url: https://actions.fun/terms
+    copyright_url: https://actions.fun/terms
+    privacy_policy_url: https://actions.fun/privacy
+    website: https://actions.fun
+  media:
+    - purpose: icon
+      uri: ./media/logo_dark.png
+release:
+  address: ''
+  media:
+    - purpose: icon
+      uri: ./media/logo_dark.png
+    - purpose: screenshot
+      uri: ./media/screenshot_1.png
+    - purpose: screenshot
+      uri: ./media/screenshot_2.png
+    - purpose: screenshot
+      uri: ./media/screenshot_3.png
+    - purpose: screenshot
+      uri: ./media/screenshot_4.png
+  files:
+    - purpose: install
+      uri: ./files/app-release.apk
+  catalog:
+    en-US:
+      name: actions.FUN
+      short_description: Prediction markets on Solana!
+      long_description: scroll & trade prediction markets on Solana. Create your own and earn 1% fees!
+      new_in_version: Public beta made with ❤️ by @actionsdotfun for @solanamobile Hackathon
+solana_mobile_dapp_publisher_portal:
+  testing_instructions: Open the app, connect your wallet and start trading! This is mainnet version, and if you want to get a test wallet, please DM us on Twitter or send us an email.
+
