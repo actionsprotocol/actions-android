@@ -17,7 +17,7 @@ This repository contains the open source actions.fun Android client.
 
 # Compilation Guide
 
-## Requirements
+### Requirements
 You will need:
 - Android Studio (latest stable version recommended)
 - Android SDK API 34 or higher
@@ -25,7 +25,7 @@ You will need:
 - JDK 17 or higher
 - Git
 
-## Setup Instructions
+### Setup Instructions
 - Clone the repository
 - `bash git clone https://github.com/actionsprotocol/actions-android.git`
 - `cd actions-android`
