@@ -20,8 +20,8 @@ You will need:
 
 ## Setup Instructions
 - Clone the repository
-- `bash git clone https://github.com/your-username/actions-fun-app.git`
-- `cd actions-fun-app`
+- `bash git clone https://github.com/actionsprotocol/actions-android.git`
+- `cd actions-android`
 - Open in Android Studio
 - Launch Android Studio
 - Select "Open an existing project"
@@ -32,9 +32,9 @@ You will need:
 ### Configure Signing
 - Navigate to `app.actionsfun.environment.Signing`
 - Modify the release configuration with your own values:
-- keyStorePassword = "your_store_password"
-- keyAlias = "your_key_alias"
-- keyPassword = "your_key_password"
+  - keyStorePassword = "your_store_password"
+  - keyAlias = "your_key_alias"
+  - keyPassword = "your_key_password"
 
 ## Network Configuration
 By default, the app uses devnet for development builds and mainnet for release builds. 
