@@ -270,7 +270,7 @@ private fun AmountInput(
                 if (isHint) {
                     Icon(
                         modifier = Modifier.size(40.dp),
-                        tint = Color(0xFFDBDEE0),
+                        tint = AppTheme.Colors.Text.Tertiary,
                         painter = painterResource(app.actionsfun.common.ui.R.drawable.ic_solana),
                         contentDescription = null,
                     )
@@ -293,7 +293,7 @@ private fun AmountInput(
                     )
                 },
                 textStyle = Heading1.copy(
-                    color = if (isHint) Color(0xFFDBDEE0) else Color(0xFF000000)
+                    color = if (isHint) AppTheme.Colors.Text.Tertiary else AppTheme.Colors.Text.Primary
                 ),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Decimal,

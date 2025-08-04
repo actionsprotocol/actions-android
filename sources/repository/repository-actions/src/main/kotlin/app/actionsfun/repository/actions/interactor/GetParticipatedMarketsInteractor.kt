@@ -35,6 +35,7 @@ internal class GetParticipatedMarketsInteractorImpl(
                     title = market.name,
                     description = market.description,
                     image = market.metadataUri,
+                    video = market.twitterVideoUrl,
                     creatorTwitterUsername = market.creatorTwitterUsername.orEmpty(),
                     creatorTwitterImage = market.creatorTwitterImage.orEmpty(),
                     createdAt = market.createdTimestamp.parseTimestamp(),

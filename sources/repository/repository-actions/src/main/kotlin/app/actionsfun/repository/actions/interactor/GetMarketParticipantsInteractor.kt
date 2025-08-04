@@ -1,6 +1,5 @@
 package app.actionsfun.repository.actions.interactor
 
-import app.actionsfun.repository.actions.interactor.model.Market
 import app.actionsfun.repository.actions.interactor.model.Participant
 import app.actionsfun.repository.actions.internal.api.ActionsApi
 import app.actionsfun.repository.actions.internal.api.model.SerializedParticipant

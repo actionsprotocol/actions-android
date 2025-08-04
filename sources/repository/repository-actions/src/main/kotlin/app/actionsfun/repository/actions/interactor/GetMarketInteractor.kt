@@ -47,6 +47,7 @@ internal class GetMarketInteractorImpl(
             createdAt = market.createdTimestamp.parseTimestamp(),
             endsAt = market.expiryTimestamp.parseTimestamp(),
             uiState = market.uiState,
+            video = market.twitterVideoUrl,
             volume = market.totalMarketSize.lamportsToSOL(),
             yesVolume = market.yesAmount.lamportsToSOL(),
             noVolume = market.noAmount.lamportsToSOL(),

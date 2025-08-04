@@ -46,6 +46,7 @@ import app.actionsfun.common.ui.style.Body14Medium
 import app.actionsfun.common.ui.style.Body16Medium
 import app.actionsfun.common.util.timeRelativeString
 import app.actionsfun.feature.market.ui.VideoUI
+import coil.compose.AsyncImage
 import java.time.OffsetDateTime
 
 @SuppressLint("UnsafeOptInUsageError")
@@ -66,6 +67,11 @@ internal fun Video(
         ThreeDimensionalLayout(
             modifier = Modifier
                 .fillMaxWidth()
+                .border(
+                    width = .5.dp,
+                    color = Color(0xFFEC58A9),
+                    shape = RoundedCornerShape(32.dp)
+                )
                 .weight(1f),
             color = AppTheme.Colors.Background.Surface,
             shape = RoundedCornerShape(32.dp),
@@ -105,11 +111,11 @@ internal fun Video(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    Image(
+                    AsyncImage(
                         modifier = Modifier
                             .size(32.dp)
                             .clip(RoundedCornerShape(8.dp)),
-                        painter = painterResource(state.creatorUsername.avatarByWalletAddress),
+                        model = state.creatorAvatar,
                         contentDescription = null,
                     )
 
@@ -162,6 +168,7 @@ private fun Preview() {
         state = VideoUI(
             title = "Will pump.fun have higher trading volume than bonk.fun in exactly 24 hours?",
             creatorUsername = "narracanz",
+            creatorAvatar = "",
             createdAt = OffsetDateTime.now(),
             marketStatusUI = MarketStatusUI.Deciding,
             videoUrl = null,

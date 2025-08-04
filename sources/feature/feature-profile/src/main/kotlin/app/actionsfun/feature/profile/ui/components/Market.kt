@@ -26,9 +26,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import app.actionsfun.common.ui.components.button.ButtonStyle
+import app.actionsfun.common.ui.components.button.PrimaryButton
 import app.actionsfun.common.ui.components.button.ThreeDimensionalButton
-import app.actionsfun.common.ui.components.threed.Gyroscopic3DLayout
-import app.actionsfun.common.ui.components.threed.ThreeDimensionalLayout
 import app.actionsfun.common.ui.style.AppTheme
 import app.actionsfun.common.ui.style.Body14Medium
 import app.actionsfun.common.ui.style.Body14Regular
@@ -54,18 +54,19 @@ internal fun Market(
     modifier: Modifier = Modifier,
     claimClick: (String) -> Unit = { Unit },
 ) {
-    ThreeDimensionalLayout(
+    Box(
         modifier = modifier
-            .fillMaxWidth(),
-        color = Color(0xFFFFFFFF),
-        shadowColor = Color(0xFFEBEBEF),
-        shadowAlignment = Alignment.BottomStart,
+            .fillMaxWidth()
+            .background(
+                color = AppTheme.Colors.Background.Surface,
+                shape = RoundedCornerShape(16.dp),
+            ),
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(all = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Header(state = state)
 
@@ -73,20 +74,12 @@ internal fun Market(
 
             if (state.claimAmount > 0f) {
                 if (!state.claimed && state.canClaim) {
-                    ThreeDimensionalButton(
+                    PrimaryButton(
                         modifier = Modifier
-                            .border(
-                                width = 1.dp,
-                                shape = RoundedCornerShape(24.dp),
-                                color = Color(0xFF21D979)
-                            )
                             .fillMaxWidth()
                             .height(36.dp),
+                        style = ButtonStyle.Green,
                         text = "Claim ${state.claimAmount} SOL",
-                        textColor = Color(0xFF21D979),
-                        color = Color(0xFFFFFFFF),
-                        shadowColor = Color(0xFF21D979),
-                        shadowAlignment = Alignment.BottomCenter,
                         onClick = { claimClick(state.address) }
                     )
                 }

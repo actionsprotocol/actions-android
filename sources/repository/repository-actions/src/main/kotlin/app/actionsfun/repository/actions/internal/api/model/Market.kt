@@ -41,6 +41,7 @@ internal data class SerializedMarket(
     val creatorTwitterUsername: String? = null,
     val creatorTwitterImage: String? = null,
     val creatorTwitterId: String? = null,
+    val twitterVideoUrl: String? = null,
     val uiState: MarketUiState
 )
 

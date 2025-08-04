@@ -32,6 +32,7 @@ internal data class MarketUIState(
 internal data class VideoUI(
     val title: String,
     val creatorUsername: String,
+    val creatorAvatar: String,
     val createdAt: OffsetDateTime,
     val marketStatusUI: MarketStatusUI,
     val videoUrl: String?,
